@@ -16,7 +16,7 @@ in the main activity of your Android project add the ScreenOrientation property 
 **Keep display non-locked** (prevent locking of the device and turning off display) in a specific page. First you need the Xamarin.Essentials plugin, in my case I did not use permission in
 AndroidManifest.xml. I use [Prism Library](https://prismnew.readthedocs.io/en/latest/Xamarin-Forms/1-Getting-Started/) so the code snippet is simple as this:
 ```csharp
-public async void OnNavigatedFrom(INavigationParameters parameters)
+        public void OnNavigatedFrom(INavigationParameters parameters)
         {
             DeviceDisplay.KeepScreenOn = false;
         }
