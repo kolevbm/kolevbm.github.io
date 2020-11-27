@@ -5,7 +5,7 @@ date:   2020-11-27 20:41:49 +0200
 categories: xamarin.forms android
 ---
 **Keep orientation of display fixed**
-in the main activity of your Android project add the ScreenOrientation propertie to what you like
+in the main activity of your Android project add the ScreenOrientation property to what you like
 ```csharp
 [Activity(Theme = "@style/MainTheme",
               ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize,
