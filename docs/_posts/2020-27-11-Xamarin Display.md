@@ -5,7 +5,7 @@ date:   2020-11-27 20:41:49 +0200
 categories: xamarin.forms android
 ---
 **Keep orientation of display fixed**
-in the main activity of your Android project add the ScreenOrientation propertie to what you like
+in the main activity of your Android project add the ScreenOrientation property to what you like
 ```csharp
 [Activity(Theme = "@style/MainTheme",
               ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize,
@@ -13,8 +13,7 @@ in the main activity of your Android project add the ScreenOrientation propertie
 ```
 [xamarinDocs](https://docs.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/layouts/device-orientation?tabs=windows)  
 
-**Keep display non-locked** (prevent locking of the device and turning off display) in a specific page. First you need the Xamarin.Essentials plugin, in my case I did not use permission in
-AndroidManifest.xml. I use [Prism Library](https://prismnew.readthedocs.io/en/latest/Xamarin-Forms/1-Getting-Started/) so the code snippet is simple as this:
+**Keep display non-locked** (prevent locking of the device and turning off display) in a specific page. First you need the Xamarin.Essentials plugin from the nuget manager and install it on both projects Forms and Android. I use [Prism Library](https://prismnew.readthedocs.io/en/latest/Xamarin-Forms/1-Getting-Started/) so my code snippet is this:
 ```csharp
 public async void OnNavigatedFrom(INavigationParameters parameters)
         {
