@@ -29,3 +29,6 @@ Resistance R must be chosen to ensure permanent dissipation of power PR.
 For example:
 
 ![image](/assets/images/1_2.jpg)
+
+*Resources:*
+[Cahier Technique No. 190](https://download.schneider-electric.com/files?p_enDocType=Cahier+Technique&p_File_Name=ECT190.pdf&p_Doc_Ref=ECT190)
