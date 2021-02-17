@@ -6,7 +6,7 @@ categories: electrical measurements
 ---
 
 ![image](/assets/images/1_3.jpg)
-
+##
 In the case of VTs with two secondary windings (one secondary winding for measurement, and
 one residual voltage secondary winding also known as a tertiary winding), it is advisable to
 connect a resistance to the terminals of the open delta connected tertiary windings of the three
