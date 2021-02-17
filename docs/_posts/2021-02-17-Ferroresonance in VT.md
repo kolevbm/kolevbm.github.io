@@ -22,10 +22,13 @@ are:
 where:
 
 Us : rated voltage of the VT secondary, connected to the resistance (V)
+
 Pe : rated thermal burden of the VT secondary winding concerned by the resistance (VA).
+
 The rated thermal burden (in VA) is the apparent power that can be supplied by the VT to the
 secondary without exceeding the limits of normal temperature rise, without precision requirements.
 Resistance R must be chosen to ensure permanent dissipation of power PR.
+
 For example:
 
 ![image](/assets/images/1_2.jpg)
