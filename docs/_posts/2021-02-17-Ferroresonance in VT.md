@@ -4,6 +4,7 @@ title: Ferroresonance in VT
 date:   2021-02-17 20:41:49 +0200
 categories: electrical measurements
 ---
+
 ![image](/assets/images/1_3.jpg)
 In the case of VTs with two secondary windings (one secondary winding for measurement, and
 one residual voltage secondary winding also known as a tertiary winding), it is advisable to
@@ -15,6 +16,7 @@ The recommended minimum values for the resistance R and power PR of this resista
 are:
 ![image](/assets/images/1_1.jpg)
 where:
+
 Us : rated voltage of the VT secondary, connected to the resistance (V)
 Pe : rated thermal burden of the VT secondary winding concerned by the resistance (VA).
 The rated thermal burden (in VA) is the apparent power that can be supplied by the VT to the
