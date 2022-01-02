@@ -1,0 +1,7 @@
+site_name: Esp32-101
+site_description: Description of the documentation
+
+nav:
+  - Home: index.md
+  - AboutMkDocs: about.md
+theme: readthedocs
