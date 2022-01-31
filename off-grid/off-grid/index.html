@@ -1,0 +1,500 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Boris Kolev" name="author"/>
+<link href="../../img/bluetooth-connect.png" rel="icon"/>
+<meta content="mkdocs-1.2.3, mkdocs-material-8.1.4" name="generator"/>
+<title>Off Grid PV - Notes</title>
+<link href="../../assets/stylesheets/main.bb3983ee.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/palette.e6a45f82.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body data-md-color-accent="" data-md-color-primary="" data-md-color-scheme="default" dir="ltr">
+<script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)</script>
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#off-grid-notes">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="Notes" class="md-header__button md-logo" data-md-component="logo" href="../.." title="Notes">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m19 10-2 2 2 2 2-2m-6.12 4.29L13 18.17v-3.76m0-8.58 1.88 1.88L13 9.58m4.71-1.87L12 2h-1v7.58L6.41 5 5 6.41 10.59 12 5 17.58 6.41 19 11 14.41V22h1l5.71-5.71-4.3-4.29M7 12l-2-2-2 2 2 2 2-2z"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            Notes
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Off Grid PV
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="" data-md-color-media="" data-md-color-primary="" data-md-color-scheme="default" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_2" hidden="" title="Switch to dark mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22z"></path></svg>
+</label>
+<input aria-label="Switch to light mode" class="md-option" data-md-color-accent="" data-md-color-media="" data-md-color-primary="" data-md-color-scheme="slate" id="__palette_2" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to light mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31z"></path></svg>
+</label>
+</form>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Notes" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="Notes">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m19 10-2 2 2 2 2-2m-6.12 4.29L13 18.17v-3.76m0-8.58 1.88 1.88L13 9.58m4.71-1.87L12 2h-1v7.58L6.41 5 5 6.41 10.59 12 5 17.58 6.41 19 11 14.41V22h1l5.71-5.71-4.3-4.29M7 12l-2-2-2 2 2 2 2-2z"></path></svg>
+</a>
+    Notes
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../..">
+        Начало
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+          Off Grid PV
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+        Off Grid PV
+      </a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_1">
+    Необходими неща
+  </a>
+<nav aria-label="Необходими неща" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+    Соларен панел
+  </a>
+<nav aria-label="Соларен панел" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+    Типове соларни панели
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+    Слънчева радиация
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#charge-controller">
+    зарядно charge controller
+  </a>
+<nav aria-label="зарядно charge controller" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#pwm-controller">
+    PWM Controller
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#mppt-controller">
+    MPPT Controller
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+    Батерия
+  </a>
+<nav aria-label="Батерия" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#depth-of-discharge-dod">
+    Depth of Discharge DOD
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_6">
+    Оразмеряване на батерията
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#-">
+    Оловно-киселинна батерия
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_7">
+    Литиеви батерии
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_8">
+    Инвертор
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../b-burago-ble/">
+        B-burago-ble
+      </a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_1">
+    Необходими неща
+  </a>
+<nav aria-label="Необходими неща" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_2">
+    Соларен панел
+  </a>
+<nav aria-label="Соларен панел" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_3">
+    Типове соларни панели
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_4">
+    Слънчева радиация
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#charge-controller">
+    зарядно charge controller
+  </a>
+<nav aria-label="зарядно charge controller" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#pwm-controller">
+    PWM Controller
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#mppt-controller">
+    MPPT Controller
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_5">
+    Батерия
+  </a>
+<nav aria-label="Батерия" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#depth-of-discharge-dod">
+    Depth of Discharge DOD
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_6">
+    Оразмеряване на батерията
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#-">
+    Оловно-киселинна батерия
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_7">
+    Литиеви батерии
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#_8">
+    Инвертор
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="off-grid-notes">Off-grid notes</h1>
+<h2 id="_1">Необходими неща</h2>
+<p><a href="https://www.opengreenenergy.com/diy-off-grid-solar-system-v2-0-2/">https://www.opengreenenergy.com/diy-off-grid-solar-system-v2-0-2/</a></p>
+<p>The following 6 steps are required for building a DIY Off-Grid Solar System:</p>
+<ol>
+<li>
+<p>Calculate Daily Energy Consumption</p>
+</li>
+<li>
+<p>Select the Battery</p>
+</li>
+<li>
+<p>Select the Solar Panel</p>
+</li>
+<li>
+<p>Select Charge Controller</p>
+</li>
+<li>
+<p>Select Inverter</p>
+</li>
+<li>
+<p>Balance of System ( BOS )</p>
+</li>
+</ol>
+<p><a href="https://blog.epever.com/sizingtable/">Online calculator for Energy Consumption</a></p>
+<h3 id="_2">Соларен панел</h3>
+<h4 id="_3">Типове соларни панели</h4>
+<p><img alt="image" src="../SolarPanels.jpg"/></p>
+<ol>
+<li>Monocrystalline:</li>
+</ol>
+<p>Monocrystalline solar cells are more efficient because they are cut from a single source of silicon.</p>
+<p>As monocrystalline solar cells are made out of a single crystal of silicon, electrons are able to flow easier through the cell, which makes the efficiency higher than other types of solar panels. The efficiency can range from 17% to 22%.</p>
+<p>Because of the way that monocrystalline panels are manufactured, they end up costing more than other kinds of solar panels.</p>
+<ol>
+<li>Polycrystalline:</li>
+</ol>
+<p>Polycrystalline solar cells are blended from multiple silicon sources and are slightly less efficient. The multiple silicon crystals in each solar cell make it harder for electrons to flow. This crystal structure makes the efficiency rate of polycrystalline panels lower than monocrystalline panels. Polycrystalline panel efficiency ratings will typically range from 15% to 17%.</p>
+<p>Polycrystalline solar panels are cheaper to produce than monocrystalline panels. Most of the residential installations use Polycrystalline solar panels.</p>
+<ol>
+<li>Thin Film:</li>
+</ol>
+<p>Thin-film solar panels are made by depositing a thin layer of a photovoltaic substance onto a solid surface, like glass. Examples of these photovoltaic substances include Amorphous silicon (a-Si), Cadmium telluride (CdTe), Copper indium gallium selenide (CIGS), Dye-sensitized solar cells (DSC).</p>
+<p>The main advantage of amorphous solar cells is that they can generate electricity in weak light conditions. However, the main problem of amorphous solar cells is the low photoelectric conversion efficiency, which is about 10-13% only.</p>
+<p><strong>Which One You Should Choose?</strong></p>
+<p>For most residential solar panel installations, it makes the most sense to install monocrystalline panels. Although you have to pay a higher price, you get better efficiency and a sleeker aesthetic than you would with polycrystalline panels.</p>
+<p>If you’re on a tight budget, however, polycrystalline panels might make more sense for you.</p>
+<p>Thin-film solar cells are mostly used in large-scale operations, such as utility or industrial solar installations because of their lower efficiency ratings.</p>
+<h4 id="_4">Слънчева радиация</h4>
+<p>Информация за с. <a href="https://globalsolaratlas.info/detail?c=43.450631,27.864075,11&amp;a=27.936401,43.470627,27.936401,43.700594,28.357544,43.700594,28.357544,43.470627,27.936401,43.470627&amp;s=43.586317,27.842102&amp;m=site&amp;pv=small,180,34,1">Приморци</a></p>
+<p>To find out the amount of solar insolation in your area, you can use the <a href="https://globalsolaratlas.info/map">Global Solar Atlas</a>. Follow the following steps:</p>
+<h3 id="charge-controller">зарядно charge controller</h3>
+<p>It is a device that is placed between the Solar Panel and the Battery Bank to control the amount of electric energy produced by Solar panels going into the batteries. The main function is to make sure that the battery is properly charged and protected from overcharging.</p>
+<p>As the input voltage from the solar panel rises, the charge controller regulates the charge to the batteries preventing any overcharging and disconnects the load when the battery is discharged.</p>
+<p>Types of solar charge controllers
+There are currently two types of charge controllers commonly used in PV power systems :</p>
+<ol>
+<li>Pulse Width Modulation (PWM) Controller
+    &gt;PWM stands for Pulse Width Modulation, which stands for the method it uses to regulate charge. Its function is to pull down the voltage of the solar array to near that of the battery to ensure that the battery is properly charged. In other words, they lock the solar panel voltage to the battery voltage by dragging the Solar panel Vmp down to the battery’s system voltage with <strong>no change in the current</strong>.
+    &gt;
+    &gt; <img alt="pwm" src="../PWMcharger.jpg"/></li>
+<li>Maximum Power Point Tracking (MPPT) Controller<blockquote>
+<p>MPPT charge controller extracts the maximum power from the PV module by forcing the PV module to operate at a voltage close to the Maximum Power Point (MPP). It has been designed to adjust its input voltage to utilize the maximum power output of the solar array and then transform this power to supply the varying voltage requirement. The input voltage is varied by using a DC/DC converter.</p>
+<pre><code>&gt; MPPT controllers do this via an adaptive algorithm that follows the maximum power point of the Solar panel/array and then adjusts the incoming voltage to maintain the most efficient amount of power for the system.
+
+&gt;The performance advantage of an MPPT controller is substantial (10% to 40%) when the solar cell temperature is low (below 45°C). They are more efficient than the PWM controller. The efficiency of a typical MPPT controller is around 94-99%.
+
+&gt;![mppt](MPPTCharger.jpg)
+</code></pre>
+</blockquote>
+</li>
+</ol>
+<p>Choosing the most suitable charge controller requires two steps:</p>
+<ol>
+<li>Voltage Selection: The charge controller voltage shall be matched with the system voltage. The standard configurations are 12, 24, and 48 volts. </li>
+<li>Current Selection: To select the proper Charge Controller, you have to know the maximum output current of the solar panel and Battery Voltage.
+$$
+I_{max} =  \frac{Solar panel Wattage}{System Voltage}   × Safety factor
+$$
+$Safety Factor$ :
+We use a standard factor to account for all Solar panel output-boosting circumstances like a sunny day with a very clear snowpack. (additional light reflected off the snow). That factor is 1.3 or 130%</li>
+</ol>
+<p>With a PWM controller, the current is drawn out of the panel at just above the battery voltage, whereas with an MPPT controller the current is drawn out of the panel at the panel maximum power voltage ( Vmp). To understand this concept, let’s take an example.</p>
+<p><strong>Example:</strong> Consider a 100 Watt panel with a current(Imp) of 5.75A &amp; voltage (Vmp) of 17.40V connected to a 12 V lead-acid battery.</p>
+<p><img alt="panela" src="../solar-panel-table.jpg"/></p>
+<h4 id="pwm-controller"><strong>PWM Controller</strong></h4>
+<p>With a PWM controller, the panel voltage would be dragged down near the voltage of the battery but the current stays the same at 5.75 amps. This happens because Solar Panels behave like a current source, so the current is determined by the available sunlight.</p>
+<p>Now the power (P)= Vbat x Imp = 12V x 5.75A = 66.6W. So the Solar panel is now behaving like a 66-watt panel.</p>
+<h4 id="mppt-controller"><strong>MPPT Controller</strong></h4>
+<p>With an MPPT controller, the panel voltage will operate at voltage close to the Maximum Power Point (MPP), and the current stays the same at 5.75 amps.</p>
+<p>Now the Power = Vmp x Imp = 17.4 x 5.75 =100W</p>
+<p>This equates to a loss of 100W-66.6W = 33.4W</p>
+<p>However the above calculation is overly optimistic as the voltage drops as temperature increases; so assuming the panel temperature rises to say 30°C above the standard test conditions (STC) temperature of 25°C and the voltage drops by 4% for every 10°C, i.e. a total of 12%.</p>
+<p>Then the power drawn by the MPPT will be 5.75A * 15.3V = 88W</p>
+<p>Power loss = 88-66.6 =21.4W, i.e. 21% more power than the PWM controller.</p>
+<h3 id="_5">Батерия</h3>
+<p>Deep-Cycle Battery:</p>
+<p>A deep cycle battery is designed to provide a steady amount of current over a long period of time. This type of battery is also designed to be deeply discharged over and over again. To accomplish this, a deep cycle battery uses thicker plates. This will lead to lower surfaces and accordingly less instant power, unlike the starting batteries.</p>
+<p>The following factors determine the battery bank size:</p>
+<ol>
+<li>
+<p>Daily power consumption</p>
+</li>
+<li>
+<p>System voltage ( 12V / 24V /48V )</p>
+</li>
+<li>
+<p>Depth of Discharge ( DOD )</p>
+</li>
+</ol>
+<h4 id="depth-of-discharge-dod">Depth of Discharge DOD</h4>
+<p><img alt="image" src="../battery.png"/></p>
+<p>The battery’s Depth of Discharge ( DOD ) is the percentage of the battery capacity that can be safely drained without damaging the battery.
+<img alt="image2" src="../battery-dod.png"/>
+As you can see in the above figure, the more a battery is allowed to discharge, the shorter its lifespan. Deep cycle batteries are designed to discharge 80% of their capacity but are recommended to choose a value of around 50% as a good trade-off between longevity, cost.</p>
+<p>For a deep cycle battery, 50% and for a lithium battery 80% DOD is considered as good practice.</p>
+<h4 id="_6">Оразмеряване на батерията</h4>
+<p>$$
+    Battery Capacity ( AH ) =\frac{Daily Energy Consumption ( Wh )}{System Voltage * DOD} 
+$$</p>
+<blockquote>
+<p>Example:</p>
+<p>Daily energy consumption =719WH ( Calculated )</p>
+<p>System Voltage = 12V</p>
+<p>DOD = 50% for Flooded Lead Acid Battery
+ Battery Capacity = 719WH / ( 12V x 0.5 ) = 119.8AH</p>
+<p>You have to select a battery with a capacity of more than 119.8AH. The nearest value available in the market is 120AH.</p>
+<p>Battery Selected: 12V / 120AH</p>
+</blockquote>
+<h4 id="-">Оловно-киселинна батерия</h4>
+<ol>
+<li>Flooded Lead-Acid (FLA) :</li>
+</ol>
+<p>These types of batteries are submerged in water. These must be checked regularly and refilled every 1-3 months to keep them working properly. It also needs to be installed in a ventilated place to allow battery gases to escape.</p>
+<ol>
+<li>Sealed Lead-Acid (SLA):</li>
+</ol>
+<p>SLA batteries come in two types, AGM (Absorbent Glass Mat) and Gel, which have many similar properties. They require little to no maintenance and are spill-proof. The key difference in AGM vs. gel batteries is that gel batteries tend to have lower charge rates and output. Gel batteries generally can’t handle as much charge current, which means they take longer to recharge and output less power.</p>
+<h4 id="_7">Литиеви батерии</h4>
+<p>Lithium is a premium battery technology with a longer lifespan and higher efficiency, but you’ll pay more money for the boost in performance.</p>
+<p>The Lithium batteries that are employed in solar systems are Lithium Iron Phosphate (LiFePO4) which have great thermal stability, high current ratings, and a long life cycle. This new technology lasts longer and can be put through deeper cycles. They also require no maintenance or venting, unlike lead-acid batteries. The main downside of lithium batteries is their higher price compared to lead-acid batteries at the moment.</p>
+<h3 id="_8">Инвертор</h3>
+<p>The inverter is rated for Continuous Watts and Surge watts</p>
+<ol>
+<li>Continuous Watts :</li>
+</ol>
+<p>Continuous watts is the total amount of watts the inverter can support indefinitely. A 2000 watt inverter can power up to 2000 watts continuously. It is also called the nominal AC output power of the inverter.</p>
+<p>If you want to run multiple appliances at the same time, just add up the power rating of the equipment that is running together at the same time.</p>
+<p>Example: Running a Fan (80W /200W), 2 nos of LED Light (6W), Laptop (65W), and WiFi Router (6W) at the same timeTotal Continuous Watts = 80+12+65+6= 163W</p>
+<ol>
+<li>Surge Watts ( Peak Watts ):</li>
+</ol>
+<p>Surge watts are the amount of power the inverter can support for a very short time, usually momentary. A 2000 watt inverter rated at 4000 surge watts can handle up to 4000 watts momentarily while starting things like motors.</p>
+<p>In the above picture, you can see the drill draws 471.6W for a short time period.</p>
+<p>In our case, the surge power is applicable for the ceiling fan during the starting which is approximately 200W.</p>
+</article>
+</div>
+</div>
+</main>
+<footer class="md-footer">
+<nav aria-label="Footer" class="md-footer__inner md-grid">
+<a aria-label="Previous: Начало" class="md-footer__link md-footer__link--prev" href="../.." rel="prev">
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
+</div>
+<div class="md-footer__title">
+<div class="md-ellipsis">
+<span class="md-footer__direction">
+                Previous
+              </span>
+              Начало
+            </div>
+</div>
+</a>
+<a aria-label="Next: B-burago-ble" class="md-footer__link md-footer__link--next" href="../../b-burago-ble/" rel="next">
+<div class="md-footer__title">
+<div class="md-ellipsis">
+<span class="md-footer__direction">
+                Next
+              </span>
+              B-burago-ble
+            </div>
+</div>
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"></path></svg>
+</div>
+</a>
+</nav>
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.361d90f1.min.js"}</script>
+<script src="../../assets/javascripts/bundle.289a2a4b.min.js"></script>
+</body>
+</html>
