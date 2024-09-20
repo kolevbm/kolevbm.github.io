@@ -1,0 +1,245 @@
+---
+sidebar_label: 'ESP-TOOL'
+sidebar_position: 1
+displayed_sidebar: espressifSidebar
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# ESPTOOL
+ 
+## Get information about the ESP chip: 
+
+
+<Tabs>
+    <TabItem value="chipID" label="Chip ID">
+    ```powershell title="command"
+    esptool.py chip_id
+    ```
+    ```powershell title="cmd output example"
+    C:\Users\KolevBM> esptool.py chip_id
+    esptool.py v4.3
+    Found 1 serial ports
+    Serial port COM3
+    Connecting...
+    Detecting chip type... ESP32-S3
+    // highlight-next-line
+    Chip is ESP32-S3 (revision v0.1)
+    Features: WiFi, BLE
+    Crystal is 40MHz
+    MAC: f4:12:fa:db:c1:f4
+    Uploading stub...
+    Running stub...
+    Stub running...
+    Warning: ESP32-S3 has no Chip ID. Reading MAC instead.
+    MAC: f4:12:fa:db:c1:f4
+    Hard resetting via RTS pin...
+    ```
+    </TabItem>
+    <TabItem value="flashID" label="Flash ID">
+    ```powershell title="command"
+    esptool.py flash_id
+    ```
+    ```powershell title="cmd output example"
+    C:\Users\KolevBM> esptool.py flash_id
+    esptool.py v4.3
+    Found 1 serial ports
+    Serial port COM3
+    Connecting...
+    Detecting chip type... ESP32-S3
+    Chip is ESP32-S3 (revision v0.1)
+    Features: WiFi, BLE
+    Crystal is 40MHz
+    MAC: f4:12:fa:db:c1:f4
+    Uploading stub...
+    Running stub...
+    Stub running...
+    Manufacturer: c8
+    Device: 4018
+    // highlight-next-line
+    Detected flash size: 16MB
+    Hard resetting via RTS pin...
+    ```
+    </TabItem>
+    <TabItem value="MAC" label="MAC address">
+    ```powershell title="command"
+    esptool.py read_mac
+    ```
+    ```powershell title="cmd output example"
+    C:\Users\KolevBM> esptool.py read_mac
+    esptool.py v4.3
+    Found 1 serial ports
+    Serial port COM3
+    Connecting...
+    Detecting chip type... ESP32-S3
+    Chip is ESP32-S3 (revision v0.1)
+    Features: WiFi, BLE
+    Crystal is 40MHz
+    MAC: f4:12:fa:db:c1:f4
+    Uploading stub...
+    Running stub...
+    Stub running...
+    // highlight-next-line
+    MAC: f4:12:fa:db:c1:f4
+    Hard resetting via RTS pin...
+    ```
+    </TabItem>
+</Tabs>
+    1. chip_id:  ```flash_id``` 
+    2. read built-in MAC address:    `read_mac`  
+
+*example:*
+```cmd
+C:\Users\KolevBM>esptool.py read_mac
+esptool.py v4.3
+Found 2 serial ports
+Serial port COM19
+Connecting....
+Detecting chip type... Unsupported detection protocol, switching and trying again...
+Connecting....
+Detecting chip type... ESP32
+Chip is ESP32-D0WDQ6 (revision v1.0)
+Features: WiFi, BT, Dual Core, 240MHz, VRef calibration in efuse, Coding Scheme None
+Crystal is 40MHz
+MAC: c8:c9:a3:c7:bd:44
+Uploading stub...
+Running stub...
+Stub running...
+MAC: c8:c9:a3:c7:bd:44
+Hard resetting via RTS pin... 
+```
+
+## Manipulate flash memory contents:
+:::note
+If using TTL converter do not forget to set IO0 to GND to enable boot mode
+:::
+- esptool.py `read_flash` command:  `read_flash <startAddress> <size> <output_file>`
+- esptool.py `write_flash`:  `write_flash <address> <input_file>`
+- esptool.py: `erase_flash` or `erase_region <address> <size>` 
+
+### Flash size
+
+```powershell title="read flash size"
+esptool.py flash_id
+```
+```powershell title="cmd output example:"
+C:\Users\KolevBM> esptool.py flash_id
+esptool.py v4.3
+Found 1 serial ports
+Serial port COM3
+Connecting...
+Detecting chip type... ESP32-S3
+Chip is ESP32-S3 (revision v0.1)
+Features: WiFi, BLE
+Crystal is 40MHz
+MAC: f4:12:fa:db:c1:f4
+Uploading stub...
+Running stub...
+Stub running...
+Manufacturer: c8
+Device: 4018
+// highlight-next-line
+Detected flash size: 16MB
+Hard resetting via RTS pin...
+```
+
+### Read
+
+esptool.py command:  `read_flash <startAddress> <size> <output_file>`
+
+<Tabs>
+    <TabItem value="autodetect" label="Autodetect flash size">
+        ```powershell title="basic read operation" 
+        esptool.py -p PORT -b 460800 read_flash 0 ALL flash_contents.bin
+        ```
+        :::note
+        `ALL` does not awlays work, instead use read with specific flash size
+        :::
+        :::tip
+        you can skip `-p PORT` argument, esptool.py will automatically search all ports
+        :::
+    </TabItem>
+    <TabItem value="specifyFlash" label="Specify flash size">
+        ```powershell title="4MB of flash"
+        esptool.py read_flash 0 0x400000 output.bin
+        ```
+        
+        ```powershell title="cmd output example:" 
+        C:\Users\KolevBM>esptool.py read_flash 0 0x400000 output.bin
+        esptool.py v4.3
+        Found 2 serial ports
+        Serial port COM19
+        Connecting....
+        Detecting chip type... Unsupported detection protocol, switching and trying again...
+        Connecting....
+        Detecting chip type... ESP32
+        Chip is ESP32-D0WDQ6 (revision v1.0)
+        Features: WiFi, BT, Dual Core, 240MHz, VRef calibration in efuse, Coding Scheme None
+        Crystal is 40MHz
+        MAC: c8:c9:a3:c7:bd:44
+        Uploading stub...
+        Running stub...
+        Stub running...
+        4194304 (100 %)
+        4194304 (100 %)
+        Read 4194304 bytes at 0x00000000 in 378.6 seconds (88.6 kbit/s)...
+        Hard resetting via RTS pin...
+        ``` 
+    </TabItem>
+</Tabs>
+
+### Write
+
+esptool.py command:  `write_flash <startAddress> <input_file>`
+
+<Tabs>
+    <TabItem value="write" label="write whole flash">
+        ```powershell title="write already read flash"
+        esptool.py write_flash 0 output.bin
+        ```
+        ```powershell title="cmd output example:"
+        C:\Users\KolevBM>esptool.py write_flash 0 output.bin
+        esptool.py v4.3
+        Found 2 serial ports
+        Serial port COM19
+        Connecting....
+        Detecting chip type... Unsupported detection protocol, switching and trying again...
+        Connecting......
+        Detecting chip type... ESP32
+        Chip is ESP32-D0WDQ6 (revision v1.0)
+        Features: WiFi, BT, Dual Core, 240MHz, VRef calibration in efuse, Coding Scheme None
+        WARNING: Detected crystal freq 41.01MHz is quite different to normalized freq 40MHz. Unsupported crystal in use?
+        Crystal is 40MHz
+        MAC: c8:c9:a3:c7:bd:44
+        Uploading stub...
+        Running stub...
+        Stub running...
+        Configuring flash size...
+        Flash will be erased from 0x00000000 to 0x003fffff...
+        Compressed 4194304 bytes to 131172...
+        Wrote 4194304 bytes (131172 compressed) at 0x00000000 in 34.4 seconds (effective 975.3 kbit/s)...
+        Hash of data verified.
+
+        Leaving...
+        Hard resetting via RTS pin...
+        ```
+    </TabItem>
+    <TabItem value="writeApp" label="write app flash">
+        ```powershell title="full write with bootloader app and partition-table binaries"
+        esptool.py write_flash 0x0 bootloader.bin 0x10000 blink.bin 0x8000 partition-table.bin
+        ```
+    </TabItem >
+</Tabs>
+
+:::tip
+The address and length must both be multiples of the SPI flash erase sector size. This is 0x1000 (4096) bytes for supported flash chips
+:::
+## Reseting into download mode
+- on esp32-dev-module : Hold `BOOT` and then press `RESET` button,  
+ you can verify it is in `download mode` by opening the serial monitor:
+ ```cmd 
+ rst:0x1 (POWERON_RESET),boot:0x3 (DOWNLOAD_BOOT(UART0/UART1/SDIO_REI_REO_V2))
+ 
+waiting for download
+ ````
