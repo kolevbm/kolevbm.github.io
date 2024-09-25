@@ -14,7 +14,7 @@
         <updated>2024-09-24T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[Open a file, perform regex and generate output file]]></summary>
         <content type="html"><![CDATA[<p>Open a file, perform regex and generate output file</p>
-<p>Create a <code>*.js</code> file dor exapmle <code>formatter.js</code> , <em>formatter</em> because this will format <a href="https://kolevbm.github.io/assets/files/beckhoff-a5039384e24b84fd6d1ec713e8073f2f.LOG/" target="_blank">beckhoff.log</a> file from MDBus session to our needs.</p>
+<p>Create a <code>*.js</code> file dor exapmle <code>formatter.js</code> , <em>formatter</em> because this will format <img decoding="async" loading="lazy" alt="beckhoff.log" src="https://kolevbm.github.io/assets/images/beckhoff-a5039384e24b84fd6d1ec713e8073f2f.LOG" class="img_ev3q"> file from MDBus session to our needs.</p>
 <ul>
 <li>will filter for slaveID 01 and func type 03 with <code>pattern1</code>, will add new line <code>\n</code> and carriage return <code>\r</code> before the first match group <code>$1</code>, which is (<code>pattern1</code>)</li>
 <li>will remove the date/time stamp on <code>pattern2</code>,</li>
