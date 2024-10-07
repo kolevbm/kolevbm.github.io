@@ -1,0 +1,38 @@
+---
+sidebar_label: "Basics"
+sidebar_position: 1
+displayed_sidebar: espressifSidebar
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# ESP-IDF Basics
+
+:::tip
+Awlays use ESP-IDF installed CLI tool shortcut to Open ESP-IDF PowerShell Environment
+
+then go to project folder and use the commands provided by the tool
+:::
+
+## Generate _sysconfig.defaults_
+
+:::note
+The format is the same as that of the `sdkconfig` file. `sdkconfig.defaults` can be created manually when one remembers all the changed configuration, or it can be generated automatically by running the `idf.py save-defconfig` command.
+:::
+
+```powershell title="inside project root directory"
+idf.py save-defconfig
+```
+
+## Upload to target
+
+From the `ESP-IDF PowerShell Environment` go to project directory and upload the binaries with `idf.py flash` command
+
+```powershell title="inside project root directory"
+idf.py flash
+```
+
+:::note
+it will automatically build the project if needed
+:::

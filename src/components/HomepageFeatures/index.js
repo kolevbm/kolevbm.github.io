@@ -47,7 +47,9 @@ export default function HomepageFeatures() {
   return (
     <section className={styles.features}>
       <div className="container">
-        <div className="row">Welcome</div>
+        <div>
+          <h1 className={styles.heading}>Welcome</h1>
+        </div>
       </div>
     </section>
   );

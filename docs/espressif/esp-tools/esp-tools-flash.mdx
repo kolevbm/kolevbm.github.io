@@ -1,5 +1,5 @@
 ---
-sidebar_label: 'ESP-TOOL'
+sidebar_label: 'Flash'
 sidebar_position: 1
 displayed_sidebar: espressifSidebar
 ---
@@ -160,7 +160,7 @@ esptool.py command:  `read_flash <startAddress> <size> <output_file>`
         you can skip `-p PORT` argument, esptool.py will automatically search all ports
         :::
     </TabItem>
-    <TabItem value="specifyFlash" label="Specify flash size">
+    <TabItem value="specifyFlash" label="Specify flash size 4MB">
         ```powershell title="4MB of flash"
         esptool.py read_flash 0 0x400000 output.bin
         ```
@@ -187,7 +187,17 @@ esptool.py command:  `read_flash <startAddress> <size> <output_file>`
         Hard resetting via RTS pin...
         ``` 
     </TabItem>
+    <TabItem value="specifyFlash 16MB" label="Specify flash size 16MB">
+        ```powershell title="16MB of flash"
+        esptool.py read_flash 0 0x1000000 output.bin
+        ```
+    </TabItem>
 </Tabs>
+
+:::tip  
+ If you want to read 16MB flash 
+ esptool.py read_flash 0 0x1000000 output.bin
+:::
 
 ### Write
 

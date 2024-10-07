@@ -1,0 +1,53 @@
+---
+sidebar_label: "Basic commands"
+sidebar_position: 2
+displayed_sidebar: linuxSidebar
+---
+
+# Basic commands
+
+## Remove directory
+
+remove all files and directories inside
+
+```
+rm -rf /path/to/directory
+```
+
+- `r`: recursive all data and directories inside
+- `f`: force
+
+## Disk free space
+
+The `df` command is used to display information about the file system's disk space usage, including the total size, used space, and available space.
+
+```bash title="disk free"
+df -h
+```
+
+## Disk usage
+
+The `du` command is used to estimate file and directory space usage. It shows how much space files and directories are using.
+
+```bash title="disk usage"
+du -h /path/to/directory
+```
+
+- `-h` human readable
+
+## Continue running a command after closing SSH connection
+
+When you close an SSH connection, processes running in that session will be terminated.
+To prevent this, you can run processes in the background and detach them from the SSH session.
+
+Using nohup (No Hang Up)
+nohup allows a process to continue running after the SSH session is closed by ignoring the hangup signal (SIGHUP).
+
+```bash title="nohup"
+nohup your_command &> output.log &
+```
+
+- `&> output.log` will redirect both stdout and stderr to output.log. You can view this log later to check the output of your command.
+
+The trailing `&` puts the process in the *background*.
+After running this, you can *safely close the SSH session* and the *process* will *continue* to run in the *background*.

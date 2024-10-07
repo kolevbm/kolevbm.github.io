@@ -1,0 +1,89 @@
+---
+slug: regex
+title: Regex MDbus LOG file with node.js
+authors: [boris]
+tags: [regex, node, js, modbus]
+---
+
+Open a file, perform regex and generate output file
+
+<!-- truncate -->
+
+Create a `*.js` file dor exapmle `formatter.js` , *formatter* because this will format [beckhoff.log](./beckhoff.LOG) file from MDBus session to our needs.
+
+
+- will filter for slaveID 01 and func type 03 with `pattern1`, will add new line `\n` and carriage return `\r` before the first match group `$1`, which is (`pattern1`)
+- will remove the date/time stamp on `pattern2`,
+- additional formatting with the 3rd pattern
+
+```js title="formatter.js"
+const fs = require("fs");
+
+// Function to process the file
+function processFile(inputFile, outputFile) {
+  // Read the input file as a string
+  fs.readFile(inputFile, "utf8", (err, data) => {
+    if (err) {
+      console.error("Error reading the input file:", err);
+      return;
+    }
+
+    // Find the pattern "01 03 " and ensure a newline before each occurrence
+    const pattern1 = "01 03 ";
+    const pattern2 = /\d{2} \d{2}:\d{2}:\d{2}\.\d{3} B/g;
+    const modifiedData = data
+      .replace(pattern2, "")
+      .replace(new RegExp(`(${pattern1})`, "g"), "\n\r$1")
+      .replace(/\s\n\s{2}/g, "");
+
+    // Write the modified content to output.txt
+    file: fs.writeFile(outputFile, modifiedData, "utf8", (err) => {
+      if (err) {
+        console.error("Error writing the output file:", err);
+        return;
+      }
+      console.log(`File processed successfully. Check the output at ${outputFile}`);
+    });
+  });
+}
+
+// Specify input and output file paths
+const inputFile = "beckhoff.log";
+const outputFile = "output.txt";
+
+// Process the file
+processFile(inputFile, outputFile);
+
+```
+
+To run the code make sure `beckhoff.log` is in the same folder and type in the terminal:
+```
+node formatter.js
+```
+this will run the app and generate a text file `output.txt` with formatted data
+
+
+## Additional Explanation:
+
+***From ChatGPT:***
+
+ The expression `\n\r$1` is commonly used in the context of a replace operation with regular expressions. Here's what it means:
+
+ `\n\r`: This represents a combination of newline (\n) and carriage return (\r), which is often used to create a new line or start a new paragraph in some operating systems (like Windows).
+
+`\n`: Newline character (moves the cursor to the next line).\
+`\r`: Carriage return (moves the cursor to the beginning of the line).\
+`$1`: In regular expressions, $1 refers to the first captured group from a matching pattern.
+
+ When you use parentheses () in a regular expression, whatever is matched inside those parentheses is stored as a "capture group."
+ `$1` is a placeholder for the content of the first capturing group, i.e., whatever was matched by the first set of parentheses in the regex.
+
+ const regex = /(\d+)/g;
+ const str = "12345";
+ const result = str.replace(regex, '\n\r$1');
+ console.log(result);
+
+ Explanation:
+
+ Pattern `(\d+)`: Captures one or more digits (e.g., 12345).
+ Replacement `\n\r$1`: Adds a newline and carriage return before the matched digits (which is captured as `$1`).

@@ -3,6 +3,17 @@ facebook:
   permalink: /facebook
   description: Facebook tag description
 
+node:
+  label: node
+
+js:
+  label: javascript
+
+regex:
+  label: regex
+  permalink: /regex
+  description: regex tag description
+
 hello:
   label: Hello
   permalink: /hello

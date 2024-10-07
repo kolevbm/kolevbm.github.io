@@ -23,7 +23,7 @@ const config = {
   projectName: "kolevbm.github.io", // Usually your repo name.
   organizationName: "kolevbm", // Usually your GitHub org/user name.
   deploymentBranch: "gh-pages",
-  trailingSlash: true,
+  trailingSlash: undefined,
 
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
@@ -43,9 +43,6 @@ const config = {
       ({
         docs: {
           sidebarPath: "./sidebars.js",
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          // editUrl: "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
         },
         blog: {
           showReadingTime: true,
@@ -53,10 +50,7 @@ const config = {
             type: ["rss", "atom"],
             xslt: true,
           },
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          // editUrl: "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
-          // Useful options to enforce blogging best practices
+
           onInlineTags: "warn",
           onInlineAuthors: "warn",
           onUntruncatedBlogPosts: "warn",
@@ -92,47 +86,33 @@ const config = {
             position: "left",
             label: "Espressif",
           },
+          {
+            type: "docSidebar",
+            sidebarId: "gitSidebar",
+            position: "left",
+            label: "Git",
+          },
+          {
+            type: "docSidebar",
+            sidebarId: "linuxSidebar",
+            position: "left",
+            label: "Linux",
+          },
+          {
+            type: "docSidebar",
+            sidebarId: "dockerSidebar",
+            position: "left",
+            label: "Docker",
+          },
           { to: "/blog", label: "Blog", position: "right" },
         ],
       },
       footer: {
         style: "dark",
         links: [
-          {
-            label: "Stack Overflow",
-            href: "https://stackoverflow.com/questions/tagged/docusaurus",
-          },
           // {
-          //   // title: "Docs",
-          //   // items: [
-          //   //   {
-          //   //     label: "Tutorial",
-          //   //     to: "/docs/intro",
-          //   //   },
-          //   // ],
-          // },
-          // {
-          //   title: "Docs",
-          //   items: [
-          //     {
-          //       label: "Tutorial",
-          //       to: "/docs/intro",
-          //     },
-          //   ],
-          // },
-
-          // {
-          //   title: "More",
-          //   items: [
-          //     {
-          //       label: "Blog",
-          //       to: "/blog",
-          //     },
-          //     {
-          //       label: "GitHub",
-          //       href: "https://github.com/facebook/docusaurus",
-          //     },
-          //   ],
+          //   label: "Stack Overflow",
+          //   href: "https://stackoverflow.com/questions/tagged/docusaurus",
           // },
         ],
         copyright: `Copyright © ${new Date().getFullYear()} BK`,
@@ -140,7 +120,7 @@ const config = {
       prism: {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
-        additionalLanguages: ["powershell"],
+        additionalLanguages: ["powershell", "bash"],
       },
     }),
 };

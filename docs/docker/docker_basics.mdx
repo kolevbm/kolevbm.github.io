@@ -1,0 +1,62 @@
+---
+sidebar_label: "Docker basics"
+sidebar_position: 1
+displayed_sidebar: dockerSidebar
+---
+
+# Notes on Docker basics
+
+## Logs
+
+### container
+
+```bash title="container logs"
+docker logs <container name/id> logs --tail 5 --follow
+```
+
+- `--tail 5`: last 5 rows
+- `--follow`: continue to update on new entries
+
+### docker compose
+
+View all containers logs that are running inside the docker compose
+
+:::note
+inside docker compose folder
+:::
+
+```bash title="docker compose logs"
+docker compose logs --tail 5 --follow
+```
+
+- `--tail 5`: last 5 rows
+- `--follow`: continue to update on new entries
+
+## Log rotation
+
+Конфигурационният файл може и да не съществува по подразбиране
+
+`etc/docker/daemon.json`
+
+To know your current logging driver for Docker Daemon, run the following command:
+
+```
+docker info --format '{{.LoggingDriver}}'
+```
+
+### links
+
+- [JSON File logging driver](https://docs.docker.com/engine/logging/drivers/json-file/)
+- [Docker Log Rotation Configuration Guide | SigNoz](https://signoz.io/blog/docker-log-rotation/)
+
+### example configuration
+
+```json title="etc/docker/daemon.json"
+{
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "10m",
+    "max-file": "3"
+  }
+}
+```
