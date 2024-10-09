@@ -1,0 +1,147 @@
+---
+sidebar_label: "Processes"
+sidebar_position: 2
+displayed_sidebar: linuxSidebar
+---
+
+# Processes
+
+## What is a Process?
+
+A process in Linux (and other Unix-like operating systems) is an instance of a running program. Each process is assigned resources such as CPU time, memory, and I/O operations, and it executes in the system until it's terminated.
+
+A process is made up of:
+
+- **Program code**: The actual instructions for what the process should do.
+- **Data**: The variables and other data the process needs.
+- **Process state**: Information like the process’s priority, open file descriptors, environment variables, and scheduling status.
+
+**Process States**
+
+A process can be in several states:
+
+- **Running (R)** : The process is either running or ready to run.
+- **Sleeping (S)**: The process is waiting for an event to complete (e.g., waiting for I/O).
+  - Interruptible Sleep: The process can be woken up by signals.
+  - Uninterruptible Sleep (D): The process is waiting on hardware to complete an operation, and cannot be interrupted until the operation finishes.
+- **Stopped (T)**: The process has been stopped by a signal or the user (e.g., with the kill command or by using Ctrl + Z).
+- **Zombie (Z)**: The process has finished execution, but its parent process hasn't yet read its exit status. Zombies are removed once the parent process acknowledges their termination.
+
+## Process IDs (PIDs)
+
+Every process is identified by a unique PID (Process ID), which is an integer assigned by the kernel when the process is created. The kernel uses PIDs to manage and track processes.
+
+- **PID 1**: The very first process started by the kernel after booting is called _init_ or its modern replacement, _systemd_. It has a **PID** of 1 and is the ancestor of all other processes on the system.
+
+- **PPID (Parent Process ID)**: Every process has a parent, which is the process that started it. The **PPID** is the **PID** of the parent process.
+
+## Daemon Processes
+
+A **daemon** is a special type of process that runs in the background, often providing system or application services. These are long-running processes typically started at boot time and don't require user interaction.
+
+- Characteristics of Daemons:
+
+  - They usually run in the background.
+  - They often start at boot and continue running until the system shuts down.
+  - Daemons typically perform tasks like handling network connections, monitoring hardware, managing services, etc.
+
+- Naming Convention: By convention, daemon processes have names **ending with the letter d** (e.g., `sshd` for the SSH daemon, `httpd` for the Apache web server daemon).
+
+- Common Daemons:
+
+  - `sshd`: Manages SSH connections to the server.
+  - `httpd`: Manages Apache HTTP web server processes.
+  - `crond`: Manages scheduled jobs (like backups, system tasks).
+  - `systemd`: The system and service manager for Linux.
+
+## Managing Daemons
+
+```bash title="bash"
+# Start a service
+sudo systemctl start sshd
+
+# Stop a service
+sudo systemctl stop sshd
+
+# Restart a service
+sudo systemctl restart httpd
+
+# Check the status of a service
+sudo systemctl status crond
+
+```
+
+## Foreground and Background Processes
+
+In Linux, processes can run in the foreground (interacting with the terminal) or in the background (detached from the terminal).
+
+- **Foreground process**: A process that takes over the terminal and runs interactively.
+  When you start a process from the command line (like running `nano`),
+  it's typically in the foreground.
+
+- **Background process**: A process that runs in the background, freeing up the
+  terminal for other tasks. You can run a command in the background by appending an
+  `&` to the command:
+
+```bash title="bash"
+my_command &
+```
+
+- To see all background processes, use `jobs`.
+- To bring a background process to the foreground, use `fg`.
+  :::info
+  when in SSH session, closing the terminal will likely kill the session and
+  stop the process checkout this to
+  [continue running a process when SSH is closed](terminal_basics#continue-running-a-command-after-closing-ssh-connection)
+  :::
+
+## Killing Processes
+
+Sometimes, a process becomes unresponsive or needs to be stopped. Linux provides several commands to kill (terminate) processes.
+
+- `kill`: Sends a signal to a process, which can instruct it to terminate or handle the signal in a different way.
+
+```bash title="bash"
+kill <PID>  # Sends the default TERM signal to gracefully stop the process
+```
+
+     You can specify different signals:
+
+    - `SIGTERM (15)`: Asks the process to terminate gracefully.
+    - `SIGKILL (9)`: Forces the process to terminate immediately.
+    - `SIGHUP (1)`: Reloads the process (often used to restart daemons without stopping them).
+
+Example:
+
+```bash title="bash"
+kill -9 1234 # Forcefully kill the process with PID 1234
+```
+
+- `pkill`: Kills processes based on name instead of PID:
+
+```bash title="bash"
+pkill apache2 # Kills all processes with the name "apache2"
+```
+
+- `killall`: Kills all processes with a specific name (similar to pkill but with more options).
+
+```bash title="bash"
+killall nginx # Kills all processes with the name "nginx"
+```
+
+## Signals
+
+Linux processes communicate with the kernel and each other using signals. These are software interrupts used to notify processes of events such as a request to terminate or a request to stop temporarily.
+
+Some common signals include:
+
+- `SIGTERM (15)`: Requests a process to terminate gracefully.
+- `SIGKILL (9)`: Immediately kills a process. This signal cannot be ignored.
+- `SIGINT (2)`: Sent when the user presses Ctrl + C in the terminal to interrupt a running process.
+- `SIGHUP (1)`: Sent to a process when its controlling terminal is closed. It’s also used to restart daemons.
+
+You can send signals to processes using the kill command or by pressing certain key combinations:
+
+`Ctrl + C`: Sends SIGINT to the foreground process, stopping it.
+
+`Ctrl + Z`: Suspends the process by sending a `SIGTSTP` signal. You can resume it in the background with `bg` or in the foreground with `fg`

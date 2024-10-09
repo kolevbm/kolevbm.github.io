@@ -12,12 +12,96 @@ displayed_sidebar: linuxSidebar
 
 A process which runs in the background and is not interactive
 
-## /etc/
+### Some important directories in the Linux filesystem:
 
-Host-specific system-wide configuration files.
+     * `/`: Root directory, the starting point of the file system
+     *  `/home`: Contains user-specific files and directories
+     * `/etc`: Configuration files
+     * `/var`: Variable files (like logs)
+     * `/bin`: Essential command binaries (like ls, cp, etc.)
+     * `/usr`: Contains user programs and applications
 
-configuration files of programs and daemons
+### Root Directory `/`
 
-## /var/log/
+     The root directory is the top-level directory in the Linux file system. Everything in the system, including all other files and directories, is nested under `/`
 
-mainly log files of daemons
+## Important directories under **root**
+
+### `/bin` (Essential User Binaries)
+
+- This directory contains essential binary executable files (commands) required for the system to function, especially for all users.
+- Commands like `ls`, `cp`, `mv`, `cat`, and `bash` are stored here.
+- These commands are **available to all users** and are necessary even for single-user mode or minimal operating systems.
+
+### `/sbin` (System Binaries)
+
+- This directory holds essential system administration binaries. These are programs and commands intended for the root user or system administrators.
+- Commands like `fdisk`, `mkfs`, and `shutdown` are stored here.
+
+### `/etc` (Configuration Files)
+
+- The `/etc` directory contains system-wide configuration files. These are text files that govern how different services and system components behave.
+- Files in `/etc` control system startup, network settings, user management, and more.
+- Example configuration files:
+  - `/etc/fstab`: Configuration for mounting file systems.
+  - `/etc/passwd`: Contains information about system users.
+  - `/etc/ssh/sshd_config`: SSH server configuration.
+
+### `/home` (Home Directories)
+
+- This is where the user-specific directories are located. Each user on the system typically has a subdirectory under `/home`, like `/home/boris`, where the user can store personal files, settings, and configurations.
+
+### `/root` (Root User’s Home Directory)
+
+This is the home directory for the root user (the system administrator). It’s separate from `/home` because it has elevated privileges and is not typically shared with normal users.
+
+### `/var` (Variable Data)
+
+The `/var` directory contains files that change frequently, such as log files, temporary files, and cache data.
+Some key subdirectories in `/var` include:
+
+- `/var/log`: System and application log files.
+- `/var/tmp`: Temporary files that need to persist after reboots.
+- `/var/www`: Often used for serving web pages (on web servers like Apache or Nginx).
+
+### `/usr`(User Programs)
+
+This directory is for user-installed software and related files that are not essential for the system to boot. It contains many important subdirectories:
+
+- `/usr/bin`: Non-essential binary files and user applications (like python, nano).
+- `/usr/sbin`: Non-essential system binaries (for system admins, but not required for basic operation).
+- `/usr/lib`: Libraries for programs in /usr/bin and /usr/sbin.
+- `/usr/share`: Architecture-independent data (like icons, documentation, and locales).
+- `/usr/local`: Locally compiled and installed software that is not part of the standard distribution.
+
+### `/dev` (Device Files)
+
+The /dev directory contains device files that represent hardware devices attached to the system. In Linux, devices like hard drives, USB drives, printers, and others are accessed as files.
+Example devices include:
+
+- `/dev/sda`: Represents the first hard drive.
+- `/dev/tty`: Represents terminal devices.
+- `/dev/null`: Represents a "bit bucket" where output can be discarded.
+
+### `/proc` (Process Information)
+
+The `/proc` directory is a virtual filesystem that provides information about system processes and kernel information. It does not contain real files but virtual files that represent the state of the system.
+It contains information about running processes (e.g., /proc/1234 for process ID 1234) and system-level information such as:
+
+- `/proc/cpuinfo`: CPU information.
+- `/proc/meminfo`: Memory usage details.
+
+### `/sys` (System Information)
+
+- Similar to `/proc`, `/sys` is a virtual filesystem used to interact with the kernel and hardware components. It contains files and directories that allow user-space processes to access and control kernel parameters and device drivers.
+- It’s primarily used for interfacing with devices, driver information, and kernel modules.
+
+### `/opt` (Optional Software)
+
+- The `/opt` directory is used to store third-party or optional software that is not managed by the system’s package manager (like APT or YUM).
+- Software installed in `/opt` is typically manually installed by the user or downloaded as a self-contained application (like proprietary software or custom software packages).
+
+### `/mnt` and `/media` (Mount Points)
+
+- `/mnt`: A generic mount point where system administrators can temporarily mount filesystems (like external drives or network shares) for accessing files on those systems.
+- `/media`: Similar to `/mnt`, but more often used for **automatically mounting removable media like USB drives**, CDs, or external hard drives

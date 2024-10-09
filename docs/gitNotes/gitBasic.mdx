@@ -1,3 +1,31 @@
 ---
 displayed_sidebar: gitSidebar
 ---
+
+# Basics
+
+## Fetch all remote branches
+
+```bash title="remote branches"
+git fetch origin
+```
+
+## Show all remote branches
+
+```bash title="remote branches"
+git branch -r
+```
+
+The command will show you all remote branches. The `-r` flag here is short for `--remotes`
+
+## To see the branches available for checkout
+
+```bash title="available branches"
+git branch -a
+```
+
+## Pull changes from a remote branch
+
+```bash title="checkout and pull branch"
+git checkout -b branchTesting origin/branchTesting
+```
