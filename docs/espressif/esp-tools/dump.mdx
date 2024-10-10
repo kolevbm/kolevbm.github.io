@@ -1,0 +1,50 @@
+---
+sidebar_label: "Dump"
+sidebar_position: 2
+displayed_sidebar: espressifSidebar
+---
+
+# Flash region Dump
+
+## 1. read partition table esptool region
+
+generally it is on addres `0x8000` or `0x9000` the size is always `0xc00`
+
+```bash title="read partition table"
+ esptool.py read_flash 0xc00 ptable.img
+```
+
+## 2. Convert partitoin image file to csv in shell
+
+c:\Espressif\frameworks\esp-idf-v5.1.2\components\partition_table> py gen_esp32part.py C:\Projects\Espressif\ESPtoolTests\ptable.img
+
+```bash
+Parsing binary partition input...
+Verifying table...
+# ESP-IDF Partition Table
+# Name, Type, SubType, Offset, Size, Flags
+nvs,data,nvs,0x9000,16K,
+phy_init,data,phy,0xf000,4K,
+otadata,data,ota,0x10000,8K,
+ota_0,app,ota_0,0x20000,4M,
+ota_1,app,ota_1,0x420000,4M,
+factory,app,factory,0x820000,4M,
+```
+
+## 3. Read NVS content
+
+0x1000 (4KB), if nvs size is 16KB size is 0x4000
+
+```bash title="read_flash"
+esptool.py read_flash 0x9000 0x4000 nvs.img
+```
+
+## 4. Erase NVS content
+
+0x1000 (4KB), if nvs size is 16KB size is 0x4000
+
+```bash title="erase_region"
+esptool.py erase_region 0x9000 0x4000
+```
+
+## 5. Contvert NVS content to human radable format

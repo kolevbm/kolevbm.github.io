@@ -1,0 +1,63 @@
+---
+sidebar_label: "User management"
+sidebar_position: 3
+displayed_sidebar: linuxSidebar
+---
+
+# User management
+
+## Create root user
+
+### 1. Create user
+
+First step is to create the user, use `adduser` or `useradd`,
+with `passwd` you can change the password of the user
+
+```bash title="add new user"
+adduser boris
+```
+
+- `adduser` will prompt you for password
+
+If you want to change the password of a user use `passwd`
+
+```bash
+passwd boris
+```
+
+### 2. Add user to sudoers
+
+To add a user to `/etc/sudoers` list you must open the config file with `visudo` command as root
+
+```bash title="open visudo"
+visudo
+```
+
+when the sudoers config file is opened, add the following
+
+```bash title="/etc/sudoers"
+boris ALL=(ALL:ALL) ALL
+```
+
+:::warning
+Never edit the sudoers with other tool, awlays use `visudo`
+:::
+
+:::info
+when the console ends with `$` you are normal user and will need to use `sudo` _SuperUserDo_ or you can type `sudo bash` and the bash will open as root `#`
+:::
+
+### 3. Restrict SSH login as root
+
+It is awlays a good idea to restrict SSH login as `root` everyone can brute force it, you can do this by changing the `etc/ssh/sshd_config`
+
+add the following
+
+```bash title="/etc/ssh/sshd_conf"
+PermitRootLogin no
+```
+
+save the file, restart the ssh `systemctl restart sshd` and try to login via SSH as `root`
+:::warning
+Be sure you **have a root user with SSH access** before restricting the `root` login
+:::
