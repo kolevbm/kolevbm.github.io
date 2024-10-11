@@ -1,0 +1,39 @@
+---
+sidebar_label: "TODO"
+displayed_sidebar: linuxSidebar
+---
+
+# Alpine linux
+
+## Export default editor
+
+before exporting it as an environment variable with `export` it is good to know the location of the bin / app
+you can do it with `which` cmd.
+
+- `which` : this command gives you the location of the bin
+
+example:
+
+```bash
+alpine:~$ which nano
+/usr/bin/nano
+alpine:~$
+```
+
+```bash title="bash"
+export EDITOR=/usr/bin/nano
+```
+
+## service status/start/stop/restart
+
+in Alpine linux you can use the built-in [OpenRC](https://docs.alpinelinux.org/user-handbook/0.1a/Working/openrc.html)
+
+Example:
+
+```bash title="alpine"
+rc-service <service> <start stop restart>
+```
+
+# debian
+
+[running nodejs app as dameon](https://nodesource.com/blog/running-your-node-js-app-with-systemd-part-1/)
