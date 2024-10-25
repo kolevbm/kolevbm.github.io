@@ -1,0 +1,213 @@
+---
+sidebar_label: "Alpine linux"
+displayed_sidebar: linuxSidebar
+---
+
+# Alpine linux
+
+## running a service
+
+### 1.Create the service script:
+
+OpenRC service scripts are located in /etc/init.d/. Each service needs its own script.
+Create a new script for your service and make it executable:
+
+```bash title="create service script"
+sudo touch /etc/init.d/myservice
+sudo chmod +x /etc/init.d/myservice
+```
+
+### 2.Edit the service script
+
+Edit the service script with your service's details:
+
+```bash title="edit service script"
+sudo nano /etc/init.d/myservice
+```
+
+Basic service script template:
+
+```bash title="service script"
+#!/sbin/openrc-run
+
+name="remioWeb"
+description="Remio docs Web server"
+
+directory="/home/boris/remioWebDocs/remioWebDocs"
+
+pidfile="/run/${RC_SVCNAME}.pid"
+command="/usr/bin/node"  # Path to your daemon or service executable
+command_args="/home/boris/remioWebDocs/remioWebDocs/node_modules/.bin/docusaurus serve --port 80 --host 0.0.0.0" # Arguments to pass to the command
+
+
+
+command_background="yes"
+
+output_log="/var/log/remioWeb.log"
+error_log="/var/log/remioWeb_error.log"
+
+depend() {
+
+ want net
+}
+```
+
+:::info
+in this example we are using `nodejs` and `docusaurus` to serve the docs its like running: `node /home/boris/remioWebDocs/remioWebDocs/node_modules/.bin/docusaurus serve --port 80 --host 0.0.0.0`
+
+in general you will run: `npm run serve -- --build --port 80 --host 0.0.0.0` if you are in the root of the project, but `node` will be a child process of `npm` and the `openrc` will not be able to kill the process
+:::
+
+### 3. Make sure it is executable
+
+After editing, ensure the script is executable:
+
+```bash title="make executable"
+
+sudo chmod +x /etc/init.d/myservice
+```
+
+### 4. Add the service to the default runlevel:
+
+To ensure the service starts automatically on boot, add it to the default runlevel:
+
+```bash title="add to default runlevel"
+sudo rc-update add myservice default
+```
+
+### 5. Start the service manually:
+
+You can start the service manually to test it:
+
+```bash title="start service"
+sudo rc-service myservice start
+```
+
+### 6. Check the status of the service:
+
+To check if the service is running, use:
+
+```bash title="check status"
+sudo rc-service myservice status
+```
+
+### 7. Stop the service:
+
+To stop the service, use:
+
+```bash title="stop service"
+sudo rc-service myservice stop
+```
+
+### 8. Using environment variables in service scripts
+
+Edit the script to include the necessary OpenRC headers and commands to start your service. Include the sourcing of environment variables:
+
+```bash title="service script"
+
+#!/sbin/openrc-run
+
+name="My Service"
+description="This is my custom service"
+command="/path/to/your/executable"
+command_args=""
+pidfile="/var/run/myservice.pid"
+output_log="/var/log/myservice.log"
+error_log="/var/log/myservice.err"
+
+depend() {
+    need net
+}
+
+start_pre() {
+    source /etc/myservice.env
+}
+```
+
+:::note
+The `start_pre` function sources the environment variables from the specified file before starting the service. Otherwise the service will not have access to the environment variables.
+:::
+Create a file to store your environment variables, for example, `/etc/myservice.env`:
+
+```bash title="create env file"
+MY_VAR1="value1"
+MY_VAR2="value2"
+export MY_VAR1 MY_VAR2
+```
+
+## Adding environment variables
+
+To add environment variables in Alpine Linux, you can set them temporarily for the current session or configure them permanently. Here are the steps for both methods:
+
+### 1. Temporarily Setting Environment Variables
+
+This method is useful for one-time settings that only need to exist for the duration of your session.
+
+```bash
+export MY_VAR="value"
+```
+
+To verify the variable:
+
+```bash
+echo $MY_VAR
+```
+
+To get all environment variables:
+
+```bash
+printenv
+```
+
+:::note
+This will remain valid only for the duration of the current shell session.
+:::
+
+### 2. Permanently Adding Environment Variables
+
+To make environment variables persistent across reboots or sessions, you can configure them in various ways depending on whether you want them for a specific user or system-wide.
+
+#### a. User-Specific (Bash Shell)
+
+#### b. System-Wide Environment Variables
+
+For system-wide environment variables (available for all users), you can add them to /etc/profile or create a new file in /etc/profile.d/.
+
+Open `/etc/profile` (or create a script in `/etc/profile.d/`):
+
+```bash
+sudo nano /etc/profile
+```
+
+Add your environment variables **at the bottom:**
+
+```bash
+export MY_VAR="value"
+```
+
+Save and exit the file.
+
+To apply the changes **without rebooting**, run:
+
+```bash
+source /etc/profile
+```
+
+##### Alternatively, you can create a file under `/etc/profile.d/`, such as:
+
+```bash
+sudo nano /etc/profile.d/myenvvars.sh
+```
+
+Inside this file, add:
+
+```bash
+export MY_VAR="value"
+```
+
+Then save and exit the file. And run `source /etc/profile` to apply the changes.
+
+:::note
+I prefer the `/etc/profile.d/` method because it keeps the `/etc/profile` file clean and organized.
+And all custom variables are stored in separate files.
+:::
