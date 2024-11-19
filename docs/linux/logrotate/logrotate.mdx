@@ -1,0 +1,57 @@
+---
+sidebar_label: "How to use logrotate"
+displayed_sidebar: linuxSidebar
+---
+
+# How to set up a simple log rotation with logrotate
+
+```bash title="check version and installation"
+logrotate --version
+```
+
+1. Create the logrotate file
+
+```bash title="Create a new logrotate file"
+touch  /etc/logrotate.d/mylogrotate
+```
+
+2. Add the configuration to the file
+
+```bash title="/etc/logrotate.d/mylogrotate"
+/var/log/myapp.log {
+     daily
+     rotate 7
+     compress
+     delaycompress
+     missingok
+     notifempty
+}
+```
+
+:::warning
+
+Known issue with nodejs console.log **not logging after rotation** - The issue here is that after log rotation, the file handle that console.log is writing to doesn’t automatically update to the newly created log file. Log rotation typically renames the active log file (like myapp.log to something like myapp.log.1) and creates a new myapp.log, but Node.js keeps writing to the old file handle unless the application is restarted or the log file is reopened.
+So you can use `copytruncate` in logrotate configuration to avoid this issue.
+:::
+
+`copytruncate` in Logrotate
+
+> Add the `copytruncate` option to your Logrotate configuration for myapp.log. This option copies the current contents to the rotated file and truncates (_setting its size to zero, erases the file contents without deleting the file itself_ ) the original myapp.log, rather than renaming it. This way, Node.js can continue writing to myapp.log without needing a new file handle.
+
+An example of the configuration:
+
+```
+/var/log/myapp.log {
+    daily
+    copytruncate
+    missingok
+    rotate 7
+    compress
+    delaycompress
+    notifempty
+}
+```
+
+:::info
+if you pass `*.log` to logrotate `/var/log/*.log`, it will rotate all the files with .log extension in the directory with given configuration.
+:::

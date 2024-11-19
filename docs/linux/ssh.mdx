@@ -6,7 +6,36 @@ displayed_sidebar: linuxSidebar
 
 # SSH login with keys
 
+## Copying Your Public Key Manually
+
+The content of your `public_key` file must be added to a file at `~/.ssh/authorized_keys` (user home directory) on your remote machine somehow.
+If the folder does not exist create it with `mkdir -p ~/.ssh` and then create the file with `touch ~/.ssh/authorized_keys`
+
+```bash title="create folder on remote machine"
+mkdir -p ~/.ssh
+```
+
+```bash title="create file on remote machine"
+touch ~/.ssh/authorized_keys
+```
+
+```bash title="copy public key to remote machine"
+echo `public_key_string` >> ~/.ssh/authorized_keys
+```
+
+:::note
+you can also use `ssh-copy-id` to copy your public key to the remote machine
+:::
+
+```bash title="copy public key to remote machine with ssh-copy-id"
+ssh-copy-id username@remote_host
+```
+
 :::tip
 When you have a SSH key login setup and ready, it is good to disable password login
 `PasswordAuthentication no` for all users inside `/etc/ssh/sshd_config` be sure you have `PubkeyAuthentication yes`
 :::
+
+## Generating a new SSH key
+
+TODO: add content

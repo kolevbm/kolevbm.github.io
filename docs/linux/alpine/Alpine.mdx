@@ -1,11 +1,25 @@
 ---
-sidebar_label: "Alpine linux"
+sidebar_label: "OpenRC services"
 displayed_sidebar: linuxSidebar
 ---
 
-# Alpine linux
+# Alpine linux and openRC
 
-## running a service
+## General openRC commands
+
+- `rc-status`: Lists the status of services.
+- `rc-service <service> start`: Starts a service.
+- `rc-service <service> stop`: Stops a service.
+- `rc-service <service> restart`: Restarts a service.
+- `rc-service <service> status`: Checks the status of a service.
+- `rc-service <service> zap`: Resets a service's state.
+- `rc-update add <service> <runlevel>`: Adds a service to a runlevel.
+- `rc-update del <service> <runlevel>`: Removes a service from a runlevel.
+- `rc-update show`: Lists all services and their runlevels.
+
+For more detailed information, you can check the [OpenRC Handbook](https://wiki.gentoo.org/wiki/OpenRC).
+
+## Creating and Running a service
 
 ### 1.Create the service script:
 

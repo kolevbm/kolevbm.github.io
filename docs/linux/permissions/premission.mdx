@@ -1,0 +1,130 @@
+---
+sidebar_label: "Permissions basics"
+displayed_sidebar: linuxSidebar
+---
+
+# Basic overview of Linux permissions
+
+each file and directory in Linux has a set of permissions
+
+they are in the following order:
+
+- `user` `group` `others` : the main three sets of permissions
+- `rwx` `rwx` `rwx`: symbolic notation per group set
+- `-rwxrwxrwx` : symbolic notation
+- `777`: numeric notation
+
+you can check the permission with `ls -l` command
+
+```bash
+ls -l
+```
+
+### What does `umask` do?
+
+The `umask` (short for user file creation mask) value **subtracts** permissions from the default permissions of **newly created files and directories** from the user.
+
+_Default permissions_ are:
+
+- Files: 666 (read and write for all) by default, minus umask.
+- Directories: 777 (read, write, execute for all) by default, minus umask.
+
+```
+ umask 022  # Sets default permission to 755 for directories and 644 for files
+```
+
+:::tip
+Summary:  
+if `umask = 022` you will get
+
+`777 - 022 = 755` for newly created directories
+
+`666 - 022 = 644` for new files
+:::
+
+### What is `chmod`
+
+`chmod` (short for change mode) : Modifying Permissions on Existing Files and Directories
+
+```bash
+chmod [who][operator][permissions] filename
+```
+
+who - Specify User Categories
+
+- `u`: User (owner of the file)
+- `g`: Group (group members)
+- `o`: Others (everyone else)
+- `a`: All (user, group, and others)
+  You can combine these values if needed. For example, ug would apply to both the user and the group.
+
+operator - Define the Operation
+
+- `+`: Add the specified permission(s).
+- `-`: Remove the specified permission(s).
+- `=`: Set the specified permission(s) exactly, overriding any existing permissions.
+  permissions - Define Permission Types
+- `r`: Read permission
+- `w`: Write permission
+- `x`: Execute permission
+
+Add Read and Write Permissions for the Owner (User)
+
+```bash
+chmod u+rw filename
+```
+
+```bash
+chmod 755 myfile    # Sets permissions to rwxr-xr-x for 'myfile'
+chmod u=rw,g=r,o=r  # Sets permissions to rw-r--r-- for 'myfile'
+```
+
+### Symbolic notation
+
+- `r` stands for read permission
+- `w` stands for write permission
+- `x` stands for execute permission
+- `-` indicates no permission
+
+For example, the permission string `-rwxr-xr--` can be broken down as follows:
+
+- `-` : This indicates that it is a regular file (not a directory or special file).
+- `rwx` : The owner has read, write, and execute permissions.
+- `r-x` : The group has read and execute permissions, but not write.
+- `r--` : Others have read permission only.
+
+### Numeric notation
+
+The main digits correspond to the following permissions:
+
+- `4` : Read permission
+- `2` : Write permission
+- `1` : Execute permission
+- `0` : No permission
+
+if you want all the permissions you can add them up `4+2+1=7`
+
+Here are all the possible numeric notations for each set:
+
+- `0` : No permission (`---`)
+- `1` : Execute permission (`--x`)
+- `2` : Write permission (`-w-`)
+- `3` : Write and execute permissions (`-wx`)
+- `4` : Read permission (`r--`)
+- `5` : Read and execute permissions (`r-x`)
+- `6` : Read and write permissions (`rw-`)
+- `7` : Read, write, and execute permissions (`rwx`)
+
+Permissions are grouped into three sets:
+
+1. **Owner permissions**: The first digit represents the permissions for the file's owner.
+2. **Group permissions**: The second digit represents the permissions for the group that the file belongs to.
+3. **Others permissions**: The third digit represents the permissions for all other users.
+
+For example, the numeric permission `755` can be broken down as follows:
+
+- `7` : The owner has read, write, and execute permissions.
+- `5` : The group has read and execute permissions.
+- `5` : Others have read and execute permissions.
+
+This corresponds to the symbolic notation `-rwxr-xr-x`.
