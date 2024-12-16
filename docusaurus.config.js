@@ -104,6 +104,12 @@ const config = {
             position: "left",
             label: "Docker",
           },
+          {
+            type: "docSidebar",
+            sidebarId: "regexSidebar",
+            position: "left",
+            label: "RegEx",
+          },
           { to: "/blog", label: "Blog", position: "right" },
         ],
       },
