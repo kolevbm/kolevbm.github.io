@@ -38,4 +38,19 @@ When you have a SSH key login setup and ready, it is good to disable password lo
 
 ## Generating a new SSH key
 
-TODO: add content
+from a linux terminal run the following command
+
+```bash title="generate new ssh key"
+ssh-keygen
+```
+
+by default it will generate a new key pair id_ed25519 in the `~/.ssh` directory
+
+```bash title="output"
+Generating public/private ed25519 key pair.
+Enter file in which to save the key (/home/boris/.ssh/id_ed25519):
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /home/boris/.ssh/id_ed25519
+Your public key has been saved in /home/boris/.ssh/id_ed25519.pub
+```
