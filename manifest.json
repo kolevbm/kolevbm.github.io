@@ -1,0 +1,21 @@
+{
+  "name": "Boris Kolev Web Notes",
+  "short_name": "BK web notes",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "description": "Boris Kolev Web Notes",
+  "icons": [
+    {
+      "src": "./img/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "./img/docusaurus.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
