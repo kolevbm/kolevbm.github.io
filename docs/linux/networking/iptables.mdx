@@ -294,6 +294,33 @@ if you have Docker installed and have a DROP policy things in step 2. and 3. are
 
 ## NAT
 
+### SNAT
+
+SNAT is used when you want to change the source IP address of packets leaving your network. This is commonly when you have
+a private network behind a firewall and want all outgoing traffic to appear as if it's coming from a single public IP address.
+
+```bash title="SNAT"
+sudo iptables -t nat -A POSTROUTING -o eth0 -j SNAT --to-source 200.0.113.5
+```
+
+### MASQUERADE
+
+Masquareding is a form of dynamic SNAT that automatically changes the source IP address of packets leaving your network to the IP address of the outgoing interface.
+
+```bash title="MASQUERADE"
+sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+```
+
+> this rule is similar to the SNAT rule, but instead of specifying a static IP address, we use the MASQUERADE target, which automatically uses the current IP address of the outgoing interface.
+
+### DNAT
+
+DNAT is used to change the destination address of packets coming into your network. This is commonly used for port forwarding, where incoming traffic to a specific port is redirected toa different IP address and port on the internal network.
+
+```bash title="DNAT"
+sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j DNAT --to-destination 192.168.200.5:8080
+```
+
 ## References
 
 1. [Linux iptables Pocket Reference, Gregor N. Purdy O'Reilly Media, Inc.](https://www.oreilly.com/library/view/linux-iptables-pocket/9780596801861/)
