@@ -1,0 +1,24 @@
+---
+sidebar_label: "WSL"
+displayed_sidebar: linuxSidebar
+---
+
+# Move the virtual hard drive of WSL to another location
+
+Windows Subsystem for Linux (WSL)
+
+`wsl --manage DISTRO_NAME --move TARGET_DIRECTORY`
+
+This operation moved ext4.vhdx for the distro.
+
+You can first list your available distros with
+```
+wsl --list
+```
+
+Then move the distro with `wsl --manage DISTRO_NAME --move TARGET_DIRECTORY`
+
+```
+wsl --manage Ubuntu --move "D:\WSL\Ubuntu-24"
+```
+This operation moved ext4.vhdx for the distro.
