@@ -129,6 +129,12 @@ const config = {
           },
           {
             type: "docSidebar",
+            sidebarId: "mikrotikSidebar",
+            position: "left",
+            label: "MikroTik",
+          },
+          {
+            type: "docSidebar",
             sidebarId: "dockerSidebar",
             position: "left",
             label: "Docker",

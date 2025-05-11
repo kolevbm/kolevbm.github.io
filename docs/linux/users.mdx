@@ -6,38 +6,54 @@ displayed_sidebar: linuxSidebar
 
 # User management
 
-## Create root user
+## Create user with root privileges
 
 ### 1. Create user
 
-First step is to create the user, use `adduser` or `useradd`,
-with `passwd` you can change the password of the user
+First step is to create the user, use `useradd` as the universal approach for all families or `adduser` for guided creation under Debian
 
-```bash title="add new user"
-adduser boris
+```bash title="With home folder and full name"
+sudo useradd -m -c "Boris Kolev" boris
 ```
 
-- `adduser` will prompt you for password
+- `-m` is for creating a home folder based on `/etc/skel`
+- `-c` is for adding a comment where we add the full name
+
+```bash title="add new user Debian only, will create home folder and ask for pass"
+sudo adduser boris
+```
 
 If you want to change the password of a user use `passwd`
 
 ```bash
-passwd boris
+sudo passwd boris
 ```
 
-### 2. Add user to sudoers
+### 2. Grant normal User with root privileges
 
-To add a user to `/etc/sudoers` list you must open the config file with `visudo` command as root
+One way is to add the user to `/etc/sudoers` list. You must open the config file with `visudo` command as root
 
 ```bash title="open visudo"
-visudo
+sudo visudo
 ```
 
-when the sudoers config file is opened, add the following
+when the sudoers config file is opened, append the following after root...
 
 ```bash title="/etc/sudoers"
-boris ALL=(ALL:ALL) ALL
+...
+# User privilege specification
+root      ALL=(ALL:ALL) ALL
+boris     ALL=(ALL:ALL) ALL
+...
 ```
+
+We can interpret the upper like this:
+
+> `boris ALL=(ALL:ALL) ALL`  
+> `who where=(run-as) (commands)`  
+> `boris onEveryHost=(as every USER : or GROUP) (all commands)`  
+> Allow user to run any command as any user/group using sudo:  
+> `sudo -u otheruser -g othergroup somecommand`
 
 :::warning
 Never edit the sudoers with other tool, awlays use `visudo`
@@ -61,3 +77,106 @@ save the file, restart the ssh `systemctl restart sshd` and try to login via SSH
 :::warning
 Be sure you **have a root user with SSH access** before restricting the `root` login
 :::
+
+## Groups
+
+### 1. Creating Groups
+
+Create a group named maintenance with group ID 2000
+
+```bash
+sudo groupadd  -g 2000 maintenance
+```
+
+### 2. Adding Users to Groups
+
+```bash
+sudo usermod -aG maintenance boris
+```
+
+### 3. Special Bits
+
+- Setuid(s) on a file = "Run as the file owner." `chmod u+s myprogram`
+
+- Setgid(s) on a folder = "New files/folders keep this group." `chmod g+s /shared/folder`
+
+- Sticky Bit(t) on a folder = "Only the file owner can delete their own files." `chmod +t /tmp`
+
+| Special Bit    | For Files                                                     | For Directories                                                               | Meaning                                                     |
+| -------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| Setuid (s)     | When a file is executed, it runs with the owner's privileges. | Not used for directories.                                                     | Used on executables like /usr/bin/passwd (change password). |
+| Setgid (s)     | When a file is executed, it runs with the group's privileges. | New files/folders created inside the directory inherit the directory's group. | Common in shared project folders.                           |
+| Sticky Bit (t) | Not useful for files anymore.                                 | Users can only delete their own files inside the directory.                   | Used on /tmp to avoid users deleting each other's files.    |
+
+The interesting and usefull here is the setgid bit, where newly created files/folders keeps the same group.
+
+```bash title="setgid(s) bit"
+chmod g+s /shared/folder
+```
+
+lets create a folder and inspect it permissions before setting the **gid bit**
+
+```bash
+boris@BorisLegion:/$ sudo mkdir -pv /shared/folder
+[sudo] password for boris:
+mkdir: created directory '/shared'
+mkdir: created directory '/shared/folder'
+```
+
+check the long list
+
+```bash title='no gid bit'
+boris@BorisLegion:/$ ls -l /shared/
+total 4
+drwxr-xr-x 2 root root 4096 Apr 28 06:09 folder
+```
+
+create a simple file
+
+```bash title="no gid bit"
+boris@BorisLegion:/$ sudo touch /shared/folder/file1.txt
+boris@BorisLegion:/$ ls /shared/folder/file1.txt
+/shared/folder/file1.txt
+boris@BorisLegion:/$ ls -l /shared/folder/file1.txt
+-rw-r--r-- 1 root root 0 Apr 28 06:13 /shared/folder/file1.txt
+```
+
+now lets set that special gid bit
+
+```bash
+boris@BorisLegion:/$ sudo chmod g+s /shared/folder/
+boris@BorisLegion:/$ ls -l /shared/
+total 4
+drwxr-sr-x 2 root root 4096 Apr 28 06:13 folder
+boris@BorisLegion:/$
+```
+
+We see that we have that `s` instead `x` in the group permission Bits. All good but now we have to change the ownership of the folder.
+Lets change **ownership** for all files and folders inside to **user** boris and **group** maintenace:
+
+```bash title="ownership"
+boris@BorisLegion:/$ sudo chown -R  boris:maintenance /shared/folder
+boris@BorisLegion:/$ ls -l /shared/
+total 4
+drwxr-sr-x 2 boris maintenance 4096 Apr 28 06:13 folder
+boris@BorisLegion:/$ ls -l /shared/folder/
+total 0
+-rw-r--r-- 1 boris maintenance 0 Apr 28 06:13 file1.txt
+```
+
+let us explore further:
+
+```bash
+boris@BorisLegion:/$ touch /shared/folder/file2.txt
+boris@BorisLegion:/$ ls -l /shared/folder/
+total 0
+-rw-r--r-- 1 boris maintenance 0 Apr 28 06:13 file1.txt
+-rw-r--r-- 1 boris maintenance 0 Apr 28 06:30 file2.txt
+boris@BorisLegion:/$ umask
+0022
+```
+
+when we create a new file in the shared folder we do not use sudo but we see it is not write-enabled for the group why is that?
+We will explore the **umask**
+
+We can set the **umask** to 002 this way files created by us will have rights for files `666 - 002 = 664` and for folders `777 - 002 = 775`

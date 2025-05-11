@@ -1,0 +1,100 @@
+---
+sidebar_label: "DHCP-Server"
+displayed_sidebar: mikrotikSidebar
+---
+
+# DHCP-Server configuration
+
+## Starting point
+
+This is run on a simulated environement using VirtualBox. There we have two machines:
+
+- Machine-A [MikroTik CHR](https://mikrotik.com/download) (Cloud Hosted Router):
+  - running RouterOS
+  - Network Adapter 1: `ether1` is NATed to the internet
+  - Network Adapter 2: `ether2` is Attached to internal network named "R1"
+- Machine-B a Debian distro to check the DHCP server:
+  - running Debian 11
+  - Network Adapter 1: `eth0` is Attached to internal network named "R1"
+
+The configuration is done using the CLI mainly on Machine-A the Mikrotik CHR.
+
+## 1. Add an ip adress to the interface running DHCP server
+
+Note that the interface may be bridge interface or just a single ethernet interface. In this example we are using `ether2` as the interface running the DHCP server.
+
+```bash title="Add IP address to the interface"
+/ip address add address=192.168.50.1/24 interface=ether2 network=192.168.50.0
+```
+
+## 2. Setup the DHCP server
+
+we will use the built-in setup command.
+
+```bash title="Setup DHCP server"
+/ip dhcp-server setup
+```
+
+and follow the prompts:
+
+```
+  Select interface to run DHCP server on
+  dhcp server interface: ether2
+
+  Select network for DHCP addresses
+  dhcp address space: 192.168.50.0/24
+
+  Select gateway for given network
+  gateway for dhcp network: 192.168.50.1
+
+  Select pool of ip addresses given out by DHCP server
+  addresses to give out: 192.168.50.55-192.168.50.60
+
+  Select DNS servers
+  dns servers: 192.168.100.1
+
+  Select lease time
+  lease time: 1800
+```
+
+## 3. Masquarading
+
+To have an internet connection on the internal network (dhcp-server runing on ether2), we need to masquerade the traffic going out of `ether1` (the NATed interface).
+
+```bash title="Masquerade"
+/ip firewall nat add chain=srcnat action=masquerade out-interface=ether1
+```
+
+e.g. automatically **changes the source IP address** of packets leaving dhcp-server network **to the IP address of the outgoing interface** (the one with internet ether1).
+
+## 4. Test the DHCP server
+
+Just run the Debian machine and check if it gets an IP address from the DHCP server.
+
+```bash title="Check IP address"
+ip addr show
+```
+
+```bash title="check gateway"
+ip route show
+```
+
+with the output similar to:
+
+```
+default via 192.168.50.1 dev eth0
+```
+
+```bash title="Check internet connection and dns"
+ping google.com
+```
+## 5. Check the DHCP leases
+```bash title="Check DHCP leases"
+/ip dhcp-server lease print
+```
+```
+Flags: D - DYNAMIC
+Columns: ADDRESS, MAC-ADDRESS, HOST-NAME, SERVER, STATUS, LAST-SEEN
+#   ADDRESS        MAC-ADDRESS        HOST-NAME  SERVER  STATUS  LAST-SEEN
+0 D 192.168.50.60  08:00:27:C7:C0:7D  debian     dhcp1   bound   1m33s
+```
