@@ -1,18 +1,23 @@
 ---
-sidebar_label: "L2tp-Server-client"
+sidebar_label: "l2tp no IPSec"
 displayed_sidebar: mikrotikSidebar
 ---
 
 # L2tp server
 
-:::Warning
-not tested yet
+:::caution
+not yet tested
 :::
 
 ## Starting point
 
 This is run on a simulated GNS3 environement set as follows:
 ![netwok-map](assets/lt2p-map.png)
+
+The goal is to create a site-to-site tunnel connection between the two sites, where the server has a static real IP and the client is not obligated to have static IP.
+:::note[without IPSec]
+This example does not use IPSec so the tunnel will not be encrypted.
+:::
 
 ### start the l2tp server
 
@@ -93,3 +98,4 @@ disabling PPP Secret does not disconnect the current session, it only prevents n
 /ppp active print
 /ppp active remove [connection number]
 ```
+

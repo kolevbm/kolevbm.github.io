@@ -1,0 +1,67 @@
+---
+sidebar_label: "l2tp/IPSec"
+displayed_sidebar: mikrotikSidebar
+---
+
+# l2tp/IPSec
+
+## RouterOS server configuration
+
+### step 1 enable the l2tp server
+
+Enable the l2tp server
+
+```
+/interface l2tp-server server set enabled=ues use-ipsec=required ipsec-secret=1020 default-profile=default
+```
+
+use-ipsec is set to required to make sure that only IPsec encapsulated L2TP connections are accepted
+
+Now what it does is enables an L2TP server and creates a dynamic IPsec peer with a specified secret.
+
+```
+[admin@MikroTik] /ip ipsec peer> print
+```
+
+:::caution
+Care must be taken if static IPsec peer configuration exists.
+:::
+
+### step 2 create a vpn pool
+
+```
+/ip pool add name=vpn-pool range=10.10.1.2-10.10.1.100
+
+/ppp profile
+set default local-address=10.10.1.1 remote-address=vpn-pool
+
+/ppp secret
+add name=user1 password=123
+add name=user2 password=123
+```
+
+## RouterOs Client configuration
+
+For RouterOS to work as L2TP/IPsec client, it is as simple as adding a new L2TP client.
+
+```
+/interface l2tp-client
+add connect-to=<Public-IP> disabled=no ipsec-secret=mySecret name=l2tp-out1 \
+password=123 use-ipsec=yes user=user1
+```
+
+It will automatically create dynamic IPsec peer and policy configurations.
+
+## make the routes for each router
+
+### Router A
+
+```
+add distance=1 dst-address=192.168.100.0/24 gateway=10.10.1.100
+```
+
+### Router B
+
+```
+add distance=1 dst-address=192.168.50.0/24 gateway=10.10.1.1
+```
