@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import Heading from "@theme/Heading";
 import styles from "./styles.module.css";
+import Link from "@docusaurus/Link";
 
 // const FeatureList = [
 //   {
@@ -48,9 +49,37 @@ export default function HomepageFeatures() {
     <section className={styles.features}>
       <div className="container">
         <div>
-          <h1 className={styles.heading}>Welcome</h1>
+          <h1 className={styles.heading}>Welcome to my notes</h1>
         </div>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <div className={styles.buttons}>
+            <Link className="button button--secondary button--lg" to="/docs/espressif/Intro">
+              Espressif notes
+            </Link>
+          </div>
+          <div className={styles.buttons}>
+            <Link className="button button--secondary button--lg" to="/docs/linux/folder_structure">
+              Linux notes
+            </Link>
+          </div>
+          <div className={styles.buttons}>
+            <Link className="button button--secondary button--lg" to="/docs/mikrotik/dhcp-server/">
+              MikroTik notes
+            </Link>
+          </div>
+          <div className={styles.buttons}>
+            <Link className="button button--secondary button--lg" to="/docs/docker/docker_basics">
+              Docker notes
+            </Link>
+          </div>
+          <div className={styles.buttons}>
+            <Link className="button button--secondary button--lg" to="/docs/nvidia/kernel">
+              Nvidia notes
+            </Link>
+          </div>
+        </div>
+
       </div>
-    </section>
+    </section >
   );
 }

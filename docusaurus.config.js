@@ -105,22 +105,16 @@ const config = {
         items: [
           {
             type: "docSidebar",
-            sidebarId: "tutorialSidebar",
-            position: "left",
-            label: "Tutorial",
-          },
-          {
-            type: "docSidebar",
             sidebarId: "espressifSidebar",
             position: "left",
             label: "Espressif",
           },
-          {
-            type: "docSidebar",
-            sidebarId: "gitSidebar",
-            position: "left",
-            label: "Git",
-          },
+          // {
+          //   type: "docSidebar",
+          //   sidebarId: "gitSidebar",
+          //   position: "left",
+          //   label: "Git",
+          // },
           {
             type: "docSidebar",
             sidebarId: "linuxSidebar",
@@ -144,6 +138,12 @@ const config = {
             sidebarId: "regexSidebar",
             position: "left",
             label: "RegEx",
+          },
+          {
+            type: "docSidebar",
+            sidebarId: "nvidiaSidebar",
+            position: "left",
+            label: "Nvidia",
           },
           { to: "/blog", label: "Blog", position: "right" },
         ],

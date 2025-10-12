@@ -3,7 +3,7 @@ sidebar_label: "RegExOne.com"
 displayed_sidebar: regexSidebar
 ---
 
-All of this are notes from (RegExOne)[https://regexone.com], a very good and comprehensive website to learn regular expressions.
+These are notes from [RegExOne](https://regexone.com), a very good and comprehensive website to learn regular expressions.
 
 TODO: edit the lessons to be more clear
 
