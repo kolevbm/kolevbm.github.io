@@ -156,7 +156,7 @@ const config = {
           //   href: "https://stackoverflow.com/questions/tagged/docusaurus",
           // },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} BK`,
+        copyright: `Copyright © ${new Date().getFullYear()} Boris Kolev`,
       },
       prism: {
         theme: prismThemes.github,
