@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunktaking_notes=self.webpackChunktaking_notes||[]).push([[8947],{6600:e=>{e.exports=JSON.parse('{"authors":[{"name":"Boris Kolev","title":"owner","key":"boris","page":null,"count":4}]}')}}]);
