@@ -18,16 +18,21 @@ import TabItem from "@theme/TabItem";
   - [Device Tree](#device-tree)
     - [1. Modify the `dts`](#1-modify-the-dts)
     - [2. Modify the `.dtsi`](#2-modify-the-dtsi)
-- [Resources](#resources)
+- [Final preparation](#final-preparation)
+- [End Result](#end-result)
+- [References](#references)
 
 {/* truncate */}
 
 ## Lab setup
 
-Board: Luckfox Pico Ultra W rv1106g 8GB 
+The SBC *luckfox-pico-ultra* is mounted on a custom made motherboard with some external peripherals such as can bus and isolated rs-485  
+  
+SBC: [Luckfox Pico Ultra W rv1106g 8GB](https://www.luckfox.com/Luckfox-Pico/EN-Luckfox-Pico-Ultra)  
+Custom motherboard: [schematics](./assets/custom-motherboard.pdf)
 
 I am using the containerized Luckfox SDK docker image `luckfoxtech/luckfox_pico:1.0` for build environment.
-As image flashing tool: `SOC Toolkit` for windows
+As image flashing tool: `SOC Toolkit` for Windows. The whole system image flashing procedure is well documented in the [official wiki](https://wiki.luckfox.com/Luckfox-Pico-Ultra/Flash-image)
 
 ## Buildroot 
 
@@ -266,11 +271,65 @@ the `clk_mcp2515` in the root node  and `&spi0` are overwrited by the dts so the
   </TabItem>
 </Tabs>
 
-## Resources
+## Final preparation
+
+Build the image with the `SDK` and upload it with the `SOC toolkit`  
+ * Useful commands in host machine:
+```bash
+# attach to the container with the SDK
+docker attach <container-name>   
+
+# when inside the SDK folder to see options
+./build.sh help  
+
+# copy a file/folder from docker container to current directory 
+docker cp <container-name>:<full-path-to-sdk>/IMAGE/IPC_EMMC_BUILDROOT_RV1106_LUCKFOX_PICO_ULTRA_W_20251125.2257_RELEASE_TEST .    
+
+``` 
+ * useful commands in embedded device:
+```bash
+# check kernel messages regarding mcp can or spi
+dmesg | grep -E "mcp|can|spi"
+
+# prepare the can0 interface link
+ip link set can0 type can bitrate 500000
+
+# set the can bus Up and active
+ip link set can0 up
+
+# check recieved messages with candump
+candump can0
+
+# make automatic start of the interface on boot
+vim /etc/network/interfaces
+
+  auto lo
+  iface lo inet loopback
+
+  auto can0
+    iface can0 inet manual
+    up /sbin/ip link set can0 up type can bitrate 500000
+    down /sbin/ip link set can0 down
+
+```
+
+
+## End Result
+
+After successful build and upload, login the Luckfox and type `dmesg | grep mcp`, you should see something similar:
+``` bash
+[    0.165740] mcp251xfd spi0.0: setup mode 0, 8 bits/w, 4000000 Hz max --> 0
+[    0.165812] mcp251xfd spi0.0: can_rx_offload_init_queue: skb_queue_len_max=512
+[    0.172937] mcp251xfd spi0.0 can0: MCP2518FD rev0.0 (-RX_INT -MAB_NO_WARN +CRC_REG +CRC_RX +CRC_TX +ECC -HD c:40.00MHz m:4.00MHz r:4.00MHz e:0.00MHz) successfully initialized.
+```
+This is okay and the can chip has been initialized
+
+## References
 
 [Luckfox Forum](https://forums.luckfox.com/viewtopic.php?p=4290&hilit=mcp2515#p4290)  
 [DeviceTree.org](https://www.devicetree.org/specifications)  
 [rv1106-luckfox-pico-ultra-ipc.dtsi](https://github.com/LuckfoxTECH/luckfox-pico/blob/994243753789e1b40ef91122e8b3688aae8f01b8/sysdrv/source/kernel/arch/arm/boot/dts/rv1106-luckfox-pico-ultra-ipc.dtsi)  
 [rv1106g-luckfox-pico-ultra-w.dts](https://github.com/LuckfoxTECH/luckfox-pico/blob/994243753789e1b40ef91122e8b3688aae8f01b8/sysdrv/source/kernel/arch/arm/boot/dts/rv1106g-luckfox-pico-ultra-w.dts)  
 [irq.h](https://github.com/LuckfoxTECH/luckfox-pico/blob/994243753789e1b40ef91122e8b3688aae8f01b8/sysdrv/source/kernel/include/dt-bindings/interrupt-controller/irq.h)  
-[rk_gpio.h](https://github.com/LuckfoxTECH/luckfox-pico/blob/994243753789e1b40ef91122e8b3688aae8f01b8/media/sysutils/include/rk_gpio.h)
+[rk_gpio.h](https://github.com/LuckfoxTECH/luckfox-pico/blob/994243753789e1b40ef91122e8b3688aae8f01b8/media/sysutils/include/rk_gpio.h)  
+[Ruixiang's Notes](https://notes.rdu.im/system/linux/canbus/)
