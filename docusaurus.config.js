@@ -99,7 +99,7 @@ const config = {
       navbar: {
         title: "Notes",
         logo: {
-          alt: "My Site Logo",
+          alt: "BK Notes Logo",
           src: "img/favicon.ico",
         },
         items: [
