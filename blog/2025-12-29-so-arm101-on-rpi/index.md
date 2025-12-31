@@ -117,7 +117,7 @@ leader.disconnect()
 ## Initial test of teleoperation
 
 When calibrated it was time to test the teleoperation, so under the isolated Python environment I run this script:
-```python
+```python title="teleoperate.py"
 from lerobot.teleoperators.so101_leader import SO101LeaderConfig, SO101Leader
 from lerobot.robots.so101_follower import SO101FollowerConfig, SO101Follower
 
@@ -149,7 +149,7 @@ One way to distinguish a device is to use the VID and PID listed from `lsusb` bu
 Bus 001 Device 061: ID 1a86:55d3 QinHeng Electronics USB Single Serial
 Bus 001 Device 062: ID 1a86:55d3 QinHeng Electronics USB Single Serial
 ```
-Another way is to bound it to the specific usb port but it was not okay, so I used the `udevadm info` to check the serial ID of each chip inside. One by one knowing for sure that /dev/ttyACM0 is the correct arm, I found the `ATTRS{serial}` of each motor driver PCB:
+Another way is to bind it to the specific usb port, but it was not okay, so I used the `udevadm info` to check the serial ID of each chip inside. One by one knowing for sure that `/dev/ttyACM0` is the correct arm, I found the `ATTRS{serial}` of each motor driver PCB:
 
 ```
 udevadm info -a /dev/ttyACM2 | grep -i serial
@@ -163,9 +163,67 @@ udevadm info -a /dev/ttyACM3 | grep -i serial
     ATTRS{serial}=="5AB9067722"
     ATTRS{serial}=="3f980000.usb"    
 ```
+Then I created a ___udev rule___ and placed that rule in `/etc/udev/rules.d/`
+``` shell title="98-LeRobot.rules"
+SUBSYSTEM=="tty", ATTRS{serial}=="5AB9067722", SYMLINK+="ttyUSB_follower_arm"
+SUBSYSTEM=="tty", ATTRS{serial}=="5AB9067929", SYMLINK+="ttyUSB_leader_arm"
+```
+With these rules in place I run the following commands to reload and trigger the new rules
+```
+sudo udevadm control --reload  
+sudo udevadm trigger
+```   
 
 ## Prepare the shell script
+Prior to creating the project running as a service I had to create and test the `autoTeleoperation.sh` script. The script checks for the existance of the files `/dev/ttyUSB_follower_arm` and ` /dev/ttyUSB_leader_arm`, if so activates the isolated python environment and runs the python script `teleoperate.py`
+```
+#!/bin/bash
+set -e #exit on error
 
+CONDA_BASE="/home/boris/opt/miniforge3"
+ENV_NAME="lerobot"
+SCRIPT="/home/boris/teleoperate.py"
+
+
+echo "Waiting for USB devices..."
+
+# -e checks if file exists
+while [ ! -e /dev/ttyUSB_follower_arm ] || [ ! -e /dev/ttyUSB_leader_arm ]; do
+    sleep 2
+done
+
+# Activate conda
+source "$CONDA_BASE/etc/profile.d/conda.sh"
+conda activate "$ENV_NAME"
+
+echo "Starting Teleoperation!"
+# Run python script
+exec python "$SCRIPT"
+```
 ## Create the daemon
+
+After the test of the shell script it was timi to create the  service itself  
+TODO: where it must be, how to load it, how to use journalctl -u to check for logs
+
+```shell title="lerobot.service"
+[Unit]
+Description=LeRobot startup service
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=boris
+WorkingDirectory=/home/boris/lerobot
+ExecStart=/home/boris/autoTeleoperate.sh
+Restart=always
+RestartSec=20
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
+```
+
 
 ## References 
