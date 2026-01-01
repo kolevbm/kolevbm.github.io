@@ -5,51 +5,69 @@ authors: [boris]
 tags: [rpi, raspbery Pi, linux, lerobot, so-arm101, so-arm, robotics, systemd, udev]
 ---
 
-Goal of this project:  
+**Goal of this project:**  
 When the rpi boots up, the teleoperation of arms to be activated shortly
+
+- [Lab setup](#lab-setup)
+- [Installation of lerobot on the rpi](#installation-of-lerobot-on-the-rpi)
+- [Calibration of the arms](#calibration-of-the-arms)
+- [Initial test of teleoperation](#initial-test-of-teleoperation)
+- [Make the usb boards (follower, leader arms) distinguishable, udev rules](#make-the-usb-boards-follower-leader-arms-distinguishable-udev-rules)
+- [Prepare the shell script](#prepare-the-shell-script)
+- [Create the daemon](#create-the-daemon)
+- [References](#references)
+
 {/* truncate */}
 ## Lab setup
+BOM:
+
+Item                        | pcs
+----------------------------|----
+SO-ARM101(follower, leader) | 2
+rpi 3B+                     | 1
+power adapter 5V 2Amps      | 4
+external powered USB hub    | 1
 
 In the beginning I had a lot of issues with the rpi recognising the usb boards of the arms, one of them, sometimes both, 
 had problems connecting as a usb device, asked the GPT of course. It was a power issue concerning both the pi itself and the boards, so I connected an external powered usb hub and everything was fine.  
 The main flaw of this lab setup is the number of power outlets I needed. Everything was 5V but I had no strong power supply onboard, so I used power adapter for each device, 4 in total.
 
 ```
-         ┌──────────────────────┐                                  
-         │   Bus Servo Driver   │                                  
-         │        board         │                                  
-         │      follower        ┼──────┐                           
-         └──────────────────────┘      │   usb    ┌─────────┐      
-         ┌─────────┐                   └──────────┼         │      
-         │ext.power│                              │         │      
-         └─────────┘                              │   USB   ┼─────┐
-                                           usb    │   hub   │     │
-         ┌──────────────────────┐      ┌──────────┤         │     │
-         │   Bus Servo Driver   │      │          └─────────┘     │
-         │        board         │      │          ┌─────────┐     │
-         │      follower        ┼──────┘          │ext.power│     │
-         └──────────────────────┘                 └─────────┘     │
-         ┌─────────┐                                              │
-         │ext.power│                                              │
-         └─────────┘                                              │
-                                                                  │
-         ┌──────────────────────────────────────────────────┐     │
-         │                                           ┌──────┐ usb │
-         │                                           │      ┼─────┘
-         │                                           │      │      
-         │                                           └──────┘      
-         ┌┐                                          ┌──────┐      
-         ││            RPI 3B+                       │      │      
-         ││                                          │      │      
-         └┘                                          └──────┘      
-         │                                           ┌──────┐      
-         │                                           │      │      
-         │                                           │      │      
-         │    ┌───┐                                  └──────┘      
-         └────└───┘─────────────────────────────────────────┘      
-         ┌─────────┐                                               
-         │ext.power│                                               
-         └─────────┘                                               
+┌──────────────────────┐                                  
+│   Bus Servo Driver   │                                  
+│        board         │                                  
+│      follower        ┼──────┐                           
+└──────────────────────┘      │   usb    ┌─────────┐      
+┌─────────┐                   └──────────┼         │      
+│ext.power│                              │         │      
+└─────────┘                              │   USB   ┼─────┐
+                                  usb    │   hub   │     │
+┌──────────────────────┐      ┌──────────┤         │     │
+│   Bus Servo Driver   │      │          └─────────┘     │
+│        board         │      │          ┌─────────┐     │
+│       leader         ┼──────┘          │ext.power│     │
+└──────────────────────┘                 └─────────┘     │
+┌─────────┐                                              │
+│ext.power│                                              │
+└─────────┘                                              │
+                                                         │
+┌──────────────────────────────────────────────────┐     │
+│                                           ┌──────┐ usb │
+│                                           │      ┼─────┘
+│                                           │      │      
+│                                           └──────┘      
+┌┐                                          ┌──────┐      
+││            RPI 3B+                       │      │      
+││                                          │      │      
+└┘                                          └──────┘      
+│                                           ┌──────┐      
+│                                           │      │      
+│                                           │      │      
+│    ┌───┐                                  └──────┘      
+└────└───┘─────────────────────────────────────────┘      
+┌─────────┐                                               
+│ext.power│                                               
+└─────────┘                                               
 ```
 
 ## Installation of lerobot on the rpi
@@ -116,7 +134,7 @@ leader.disconnect()
 ```
 ## Initial test of teleoperation
 
-When calibrated it was time to test the teleoperation, so under the isolated Python environment I run this script:
+When calibrated it was time to test the teleoperation, so under the isolated Python environment I ran this script:
 ```python title="teleoperate.py"
 from lerobot.teleoperators.so101_leader import SO101LeaderConfig, SO101Leader
 from lerobot.robots.so101_follower import SO101FollowerConfig, SO101Follower
@@ -151,7 +169,7 @@ Bus 001 Device 062: ID 1a86:55d3 QinHeng Electronics USB Single Serial
 ```
 Another way is to bind it to the specific usb port, but it was not okay, so I used the `udevadm info` to check the serial ID of each chip inside. One by one knowing for sure that `/dev/ttyACM0` is the correct arm, I found the `ATTRS{serial}` of each motor driver PCB:
 
-```
+```shell
 udevadm info -a /dev/ttyACM2 | grep -i serial
     ATTRS{product}=="USB Single Serial"
     // highlight-start
@@ -168,7 +186,7 @@ Then I created a ___udev rule___ and placed that rule in `/etc/udev/rules.d/`
 SUBSYSTEM=="tty", ATTRS{serial}=="5AB9067722", SYMLINK+="ttyUSB_follower_arm"
 SUBSYSTEM=="tty", ATTRS{serial}=="5AB9067929", SYMLINK+="ttyUSB_leader_arm"
 ```
-With these rules in place I run the following commands to reload and trigger the new rules
+With these rules in place I ran the following commands to reload and trigger the new rules
 ```
 sudo udevadm control --reload  
 sudo udevadm trigger
@@ -176,7 +194,7 @@ sudo udevadm trigger
 
 ## Prepare the shell script
 Prior to creating the project running as a service I had to create and test the `autoTeleoperation.sh` script. The script checks for the existance of the files `/dev/ttyUSB_follower_arm` and ` /dev/ttyUSB_leader_arm`, if so activates the isolated python environment and runs the python script `teleoperate.py`
-```
+```bash title="autoTeleoperation.sh"
 #!/bin/bash
 set -e #exit on error
 
@@ -202,10 +220,10 @@ exec python "$SCRIPT"
 ```
 ## Create the daemon
 
-After the test of the shell script it was timi to create the  service itself  
-TODO: where it must be, how to load it, how to use journalctl -u to check for logs
+After the test of the shell script it was timi to create the service itself. The file should be in `/etc/systemd/user/` or 
+`/etc/systemd/system/`. 
 
-```shell title="lerobot.service"
+```bash title="lerobot.service"
 [Unit]
 Description=LeRobot startup service
 After=network.target
@@ -224,6 +242,21 @@ StandardError=journal
 [Install]
 WantedBy=multi-user.target
 ```
+Useful commands for activating and starting the service:
+``` shell
+sudo systemctl daemon-reload
+sudo systemctl enable lerobot.service  # enable at boot
+sudo systemctl start lerobot.service   # start the service now
+
+```
+Check actual logs of the service:
+``` shell
+journalcrl -u lerobot.service -f 
+```
 
 
 ## References 
+
+[lerobot](https://huggingface.co/docs/lerobot/so101)  
+[udev rules](https://www.clearpathrobotics.com/assets/guides/kinetic/ros/Udev%20Rules.html)  
+[udev rules advanced](https://www.reactivated.net/writing_udev_rules.html)  
